@@ -6,7 +6,7 @@ import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material";
-import theme from "./theme";
+import theme from "./app/MaterialTheme";
 import "./css/index.css";
 
 ReactDOM.render(
