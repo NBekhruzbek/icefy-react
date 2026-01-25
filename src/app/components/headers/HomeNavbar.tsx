@@ -1,5 +1,6 @@
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import "../../../css/homeNavbar.css";
 
 export function HomeNavbar() {
   const authMember = null;
@@ -90,7 +91,47 @@ export function HomeNavbar() {
             )}
           </Stack>
         </Stack>
-        <Stack>DETAIL</Stack>
+        <Stack sx={{ mt: "177px", ml: "76px" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <Box
+              sx={{
+                width: "60px",
+                height: "3px",
+                backgroundColor: "#f83d8e",
+              }}
+            />
+            <Box className={"welcome-txt"}>Welcome to The Icefy</Box>
+          </Box>
+          <Stack sx={{ width: "847px", height: "247px", mt: "30px" }}>
+            <Box className={"dis-txt"}>Discover Sweet</Box>
+            <Box className={"dis-txt"}>Delights!</Box>
+          </Stack>
+          <Stack>
+            <Box className={"intro-txt"}>
+              Relish the timeless taste of handcrafted ice cream, made with
+              passion and the finest ingredients.
+            </Box>
+          </Stack>
+          <Stack>
+            {!authMember ? (
+              <Box sx={{ mt: "60px" }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: "#ad06b9",
+                    color: "#f8f8ff",
+                    width: "120px",
+                    height: "50px",
+                  }}
+                >
+                  SIGN UP
+                </Button>
+              </Box>
+            ) : (
+              <img />
+            )}
+          </Stack>
+        </Stack>
       </Container>
     </div>
   );

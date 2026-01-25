@@ -1,0 +1,29 @@
+/*******************************************/
+/** HomeNavbar body*/
+.welcome-txt {
+  font-family: "Berkshire Swash";
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px; /* 100% */
+  color: #f83d8e;
+}
+
+.dis-txt {
+  font-family: "Berkshire Swash";
+  font-size: 130px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 108px; /* 96.429% */
+  color: #fff;
+}
+
+.intro-txt {
+  width: 560px;
+  font-family: Archivo;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px; /* 136.364% */
+  color: #c2c8c2;
+}
