@@ -47,7 +47,7 @@ export function HomeNavbar() {
               </NavLink>
             </Box>
             <Box className={"nav-txt hover-line"}>
-              <NavLink to="/prducts" activeClassName={"underline"}>
+              <NavLink to="/products" activeClassName={"underline"}>
                 Products
               </NavLink>
             </Box>
@@ -65,13 +65,13 @@ export function HomeNavbar() {
             </Box>
             {!authMember ? (
               <Box className={"nav-txt hover-line"}>
-                <NavLink to="/member-page" activeClassName={"underline"}>
+                <NavLink to="/user-page" activeClassName={"underline"}>
                   My Page
                 </NavLink>
               </Box>
             ) : null}
             <Box className={"nav-txt hover-line"}>
-              <NavLink to="/help" activeClassName={"underline"}>
+              <NavLink to="/help-page" activeClassName={"underline"}>
                 Help
               </NavLink>
             </Box>

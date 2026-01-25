@@ -72,7 +72,7 @@ export default function Footer() {
                 </Box>
                 <Box className={"nav-menu-nav"}>
                   <Typography className="nav-dot">.</Typography>
-                  <NavLink to="/help" className={"nav-menu-txt"}>
+                  <NavLink to="/help-page" className={"nav-menu-txt"}>
                     Help
                   </NavLink>
                 </Box>

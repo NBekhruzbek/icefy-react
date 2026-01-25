@@ -1,3 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap");
+
+.other-navbar .main-txt {
+  text-align: center;
+  font-family: "Berkshire Swash", serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 80px;
+  color: #0f0200;
+}
 .footer {
   width: 100% !important;
   max-width: 100% !important;

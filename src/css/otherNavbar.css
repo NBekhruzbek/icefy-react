@@ -1,0 +1,134 @@
+@import url("https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap");
+
+.other-navbar .main-txt {
+  text-align: center;
+  font-family: "Berkshire Swash", serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 80px;
+  color: #0f0200;
+}
+
+.other-navbar {
+  width: 100%;
+  display: flex;
+  background: white;
+  position: relative;
+}
+
+.other-navbar::after {
+  content: "";
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    106deg,
+    #efd7ef 8%,
+    #f5f9fc 40%,
+    #f8eae1 66%,
+    #eaf8f9 91%
+  );
+  z-index: 0;
+}
+
+.other-navbar > * {
+  position: relative;
+  z-index: 2;
+}
+
+.other-navbar .icefy-logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 180px;
+  height: 100%;
+  font-size: xx-large;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  color: #9e06ab;
+}
+
+.other-navbar .nav-txt {
+  font-size: large;
+  font-weight: 600;
+  cursor: pointer;
+  color: #010101;
+}
+
+.other-navbar a {
+  text-decoration: none;
+}
+
+.other-navbar .hover-line a {
+  color: #000000;
+  z-index: 100;
+}
+
+.other-navbar .underline {
+  display: block;
+  content: "";
+  border-bottom: solid 3px #f83d8e;
+}
+
+.other-navbar .hover-line:after {
+  display: block;
+  content: "";
+  border-bottom: solid 3px #f83d8e;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+}
+
+.other-navbar .hover-line:hover:after {
+  transform: scaleX(1);
+}
+
+.other-navbar div.hover-line:after {
+  transform-origin: 0% 50%;
+}
+
+.other-navbar .main-txt {
+  text-align: center;
+  font-family: "Berkshire Swash";
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 80px; /* 100% */
+  color: #0f0200;
+}
+
+.other-navbar .location {
+  width: 231.19px;
+  height: 52px;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  border-radius: 35px;
+  background: #fff;
+  box-shadow: 0 2px 73px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: #f83d8e; /* Home qizil */
+}
+
+.other-navbar .location-txt {
+  color: #0f0200; /* About Us qora */
+  text-align: center;
+  font-family: Archivo;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  margin-left: 5px; /* Bo'sh joy */
+}
