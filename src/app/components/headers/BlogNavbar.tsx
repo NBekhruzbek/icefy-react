@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import "../../../css/otherNavbar.css";
+import Basket from "./Basket";
 
 export function BlogNavbar() {
   const authMember = null;
@@ -76,6 +77,7 @@ export function BlogNavbar() {
               </NavLink>
             </Box>
             {/** BASKET */}
+            <Basket />
 
             {!authMember ? (
               <Box>
