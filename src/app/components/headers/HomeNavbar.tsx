@@ -22,8 +22,8 @@ export function HomeNavbar() {
             <Typography>
               <NavLink to="/" className={"icefy-logo"}>
                 <img
-                  style={{ width: "80px", height: "80px " }}
-                  src="/icons/logo.png"
+                  style={{ width: "160px", height: "160px " }}
+                  src="/icons/logo.svg"
                 />
                 Icefy
               </NavLink>

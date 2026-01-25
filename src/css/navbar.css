@@ -1,8 +1,9 @@
 .home-navbar {
   width: 100%;
-  height: 1052px;
+  min-height: 1052px; /* height o'rniga min-height */
   display: flex;
   background-size: cover;
+  position: relative; /* qo'shing */
 }
 
 /* Video Background */
@@ -43,7 +44,6 @@
   height: 100%;
   font-size: xx-large;
   font-weight: 600;
-  font-style: inherit;
   letter-spacing: 2px;
   cursor: pointer;
   color: #9e06ab;
