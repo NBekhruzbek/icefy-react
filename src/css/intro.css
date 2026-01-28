@@ -1,0 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap");
+
+.intro {
+  width: 100%;
+  max-width: 1230px;
+  height: auto;
+  margin: 100px auto 0;
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
+}
+
+.circle-bg {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  background: #eee6f0;
+  border-radius: 50%;
+  margin-top: 110px;
+  margin-left: 50px;
+  z-index: -1;
+}
+
+.img1 {
+  width: 64px;
+  height: 62px;
+  position: absolute;
+  margin-top: 466px;
+  margin-left: -25px;
+}
+
+.intro .intro-img {
+  width: 619px;
+  height: 724px;
+  position: relative;
+  z-index: 1;
+}
+
+.intro .txt-area {
+  width: 603px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.intro .txt-area .img2 {
+  width: 52px;
+  height: 55px;
+  position: absolute;
+  margin-left: 605px;
+}
+
+.intro .txt-area .main-txt1 {
+  display: flex;
+  width: 603px;
+  height: 150px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+
+  color: #0f0200;
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px;
+}
+
+.intro .main-txt2 {
+  display: flex;
+  width: 603px;
+  height: 120px;
+
+  color: #f83d8e;
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px;
+}
+
+.intro .txt-area .extra-txt {
+  width: 550.29px;
+  height: 130px;
+
+  color: #646464;
+  font-family: Archivo;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.intro .button {
+  display: flex;
+  width: 238px;
+  height: 62px;
+  padding: 0 38.681px 0 39px;
+  justify-content: center;
+  gap: 17.698px;
+  border-radius: 30px;
+
+  color: #fff;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 14.5px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px;
+  text-decoration: none;
+}
+
+.intro .img3 {
+  width: 224px;
+  height: 92px;
+  position: absolute;
+  margin-top: 632px;
+  right: -3%;
+}
