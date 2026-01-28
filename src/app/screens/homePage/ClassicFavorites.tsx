@@ -3,7 +3,8 @@ import { Box, Container, Stack, Typography } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "../../../css/classicFavorites.css";
-import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
+import SwiperCore from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ProductCard from "../../components/cards/Favorites";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
