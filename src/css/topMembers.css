@@ -1,0 +1,74 @@
+.active-users-frame {
+  width: 100%;
+  height: 620px;
+  display: flex;
+  background: linear-gradient(
+    301deg,
+    #efd7ef 8%,
+    #f5f9fc 43%,
+    #f8eae1 64%,
+    #eaf8f9 87%
+  );
+}
+
+.active-users-frame .main {
+  margin-top: 93px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.active-users-frame .main .category-title {
+  font-family: "Roboto Serif";
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: #343434;
+}
+
+.active-users-frame .main .cards-frame {
+  margin-top: 56px;
+  width: 1262px;
+  height: 302.255px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.active-users-frame .main .cards-frame .card {
+  width: 305px;
+  height: 302.255px;
+  cursor: pointer;
+}
+
+.active-users-frame .main .cards-frame .card .info {
+  width: auto;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  margin-top: -12px;
+  text-align: center;
+  font-family: "Roboto Serif";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  background: #fff;
+  color: #000;
+}
+
+.active-users-frame .no-data {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 34px;
+  color: #e3c08d;
+}
