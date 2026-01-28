@@ -1,10 +1,10 @@
 import React from "react";
 import { Container } from "@mui/material";
 
-export default function Categories() {
+export default function TopMembers() {
   return (
     <div>
-      <Container>Categories</Container>
+      <Container>TopMembers</Container>
     </div>
   );
 }

@@ -12,7 +12,7 @@ import "../../../css/footer.css";
 
 const Footers = styled.div`
   width: 100%;
-  height: 390px;
+  height: auto;
   display: flex;
   background: #683292;
   background-size: cover;
