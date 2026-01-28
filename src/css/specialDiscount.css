@@ -1,0 +1,71 @@
+.discount {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 1;
+}
+
+.discount .main-txt {
+  display: flex;
+  width: 397.015px;
+  height: 251px;
+  flex-direction: column;
+  justify-content: center;
+
+  font-family: "Berkshire Swash";
+  font-size: 112px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 112px; /* 100% */
+  color: #fff;
+}
+
+.discount .extra-txt {
+  display: flex;
+  width: 500px;
+  height: 30px;
+  margin-top: 20px;
+  flex-direction: column;
+  justify-content: center;
+
+  font-family: Archivo;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px; /* 100% */
+  color: #fff;
+}
+
+.discount .nav-link {
+  text-decoration: none;
+}
+
+.discount .nav-link .button {
+  display: flex;
+  width: 211.09px;
+  height: 62px;
+  margin-top: 50px;
+  padding: 0 41.681px 0 42px;
+  justify-content: center;
+  border-radius: 40px;
+
+  color: #fff;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px; /* 100% */
+}
+
+.discount .discount-code {
+  margin-top: 73px;
+  margin-left: 30px;
+
+  color: #fff;
+  font-family: Archivo;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 100% */
+}
