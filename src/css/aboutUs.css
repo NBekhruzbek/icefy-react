@@ -134,3 +134,87 @@
   text-decoration: none;
   text-transform: none;
 }
+
+/** STATISTICS sectional component **/
+
+.about-us-page .statistics {
+  display: flex;
+  flex-direction: column;
+  margin-top: 134px;
+  padding-bottom: 150px;
+}
+
+.about-us-page .statistics .txt-area {
+  justify-content: center;
+}
+
+.about-us-page .statistics .txt-area .main-txt {
+  text-align: center;
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px;
+}
+
+.about-us-page .statistics .txt-area .extra-txt {
+  margin-top: 13px;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 130% */
+  color: #646464;
+}
+
+.about-us-page .statistics .static-cards {
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.about-us-page .statistics .static-card {
+  width: 255px;
+  height: 182px;
+  margin-top: 40px;
+  border-radius: 15px;
+  border-bottom: 2px solid #f83d8e;
+  background: #fff;
+  box-shadow: 0 12px 105px 12px rgba(0, 0, 0, 0.03);
+}
+
+.about-us-page .statistics .static-card .static-number {
+  margin-top: 42px;
+  text-align: center;
+  font-family: "Berkshire Swash";
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 44px; /* 100% */
+  color: #0f0200;
+}
+
+.about-us-page .statistics .static-card .static-symbol {
+  text-align: center;
+  font-family: Archivo;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px; /* 100% */
+  color: #f83d8e;
+}
+
+.about-us-page .statistics .static-card .static-txt {
+  margin-top: 28px;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 100% */
+  color: #646464;
+}
