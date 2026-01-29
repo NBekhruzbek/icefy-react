@@ -305,3 +305,40 @@
   line-height: 24px; /* 150% */
   color: #646464;
 }
+
+/** ADDRESS sectioanl component **/
+
+.about-us-page .address {
+  display: flex;
+  flex-direction: column;
+  padding-top: 140px;
+  padding-bottom: 20px;
+}
+
+.about-us-page .address .main-txt {
+  text-align: center;
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px; /* 106.667% */
+  color: #0f0200;
+}
+
+.about-us-page .address .address-txt {
+  padding-top: 20px;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 130% */
+  color: #646464;
+}
+
+.about-us-page .address .address-map {
+  margin-top: 70px;
+  margin-bottom: 89px;
+  border-radius: 80px;
+  border: 3px solid #f83d8e;
+}
