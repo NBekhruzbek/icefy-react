@@ -4,6 +4,12 @@ import { NavLink } from "react-router-dom";
 export default function Intro() {
   return (
     <div>
+      <Box className={"intro-icon"}>
+        <img
+          src="/img/aboutUsIntroIcon.png"
+          alt="Your browser does not support the img!"
+        />
+      </Box>
       <Container>
         <Stack className="about-intro">
           <Box>
