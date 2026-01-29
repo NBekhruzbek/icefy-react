@@ -1,0 +1,56 @@
+.about-us-page {
+  width: 100%;
+  height: auto;
+}
+
+/** INTRO SECTIONAL COMPONENT **/
+
+.about-us-page .about-intro {
+  margin-top: 147px;
+  padding-bottom: 149px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.about-us-page .about-intro .intro-img {
+  width: 590px;
+  height: 590px;
+  border-radius: 590px;
+}
+
+.about-us-page .about-intro .txt-area {
+  flex-direction: column;
+  align-content: space-between;
+}
+
+.about-us-page .about-intro .txt-area .main-txt {
+  width: 580px;
+  height: 139px;
+  margin-top: 10px;
+
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px; /* 106.667% */
+  color: #0f0200;
+}
+
+.about-us-page .about-intro .txt-area .extra-txt {
+  width: 580px;
+  margin-top: 30px;
+  font-family: Archivo;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 160% */
+  color: #646464;
+}
+
+.about-us-page .about-intro .txt-area .button {
+  width: 192.05px;
+  height: 62px;
+  margin-top: 30px;
+  border-radius: 30px;
+}
