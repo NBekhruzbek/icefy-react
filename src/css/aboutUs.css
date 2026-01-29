@@ -63,3 +63,74 @@
   margin-top: 30px;
   border-radius: 30px;
 }
+
+/** MOMENTS **/
+.about-us-page .about-us-moments {
+  height: 723px;
+  position: relative;
+  overflow: hidden;
+  background: #683292;
+}
+
+.about-us-page .about-us-moments .moments-img {
+  position: absolute;
+  right: -5%;
+  z-index: 0;
+}
+
+.about-us-page .about-us-moments .momentsIcon1 {
+  position: absolute;
+  margin-top: 215px;
+  margin-left: 140px;
+}
+
+.about-us-page .about-us-moments .momentsIcon2 {
+  position: absolute;
+  margin-top: 425px;
+  margin-left: 100px;
+}
+
+.about-us-page .about-us-moments .momentsIcon3 {
+  position: absolute;
+  margin-top: 519px;
+  margin-left: 740px;
+}
+
+.about-us-page .about-us-moments .txt-area {
+  position: relative;
+  width: 520px;
+  margin-top: 159px;
+  margin-left: 60px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.about-us-page .about-us-moments .txt-area .main-txt {
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px; /* 106.667% */
+  color: #fff;
+}
+
+.about-us-page .about-us-moments .txt-area .extra-txt {
+  margin-top: 36px;
+  font-family: Archivo;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 160% */
+  color: #fff;
+}
+
+.about-us-page .about-us-moments .txt-area .button {
+  width: 192.05px;
+  height: 62px;
+  margin-top: 46px;
+  font-size: 18px;
+  border-radius: 30px;
+  text-decoration: none;
+  text-transform: none;
+}
