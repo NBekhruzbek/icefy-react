@@ -218,3 +218,90 @@
   line-height: 16px; /* 100% */
   color: #646464;
 }
+
+/** TEAM MEMBERS sectional component **/
+
+.about-us-page .team-members {
+  display: flex;
+  flex-direction: column;
+  padding-top: 136px;
+  padding-bottom: 136px;
+}
+
+.about-us-page .team-members .txt-area {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+}
+
+.about-us-page .team-members .txt-area .main-txt {
+  color: #0f0200;
+  text-align: center;
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px; /* 106.667% */
+}
+
+.about-us-page .team-members .txt-area .extra-txt {
+  margin-top: 13px;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 130% */
+  color: #646464;
+}
+
+.about-us-page .team-members .member-cards {
+  margin-top: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.about-us-page .team-members .member-cards .member-card {
+  width: 360px;
+  height: 540px;
+  flex-direction: column;
+  align-content: space-between;
+  background: white;
+  border-radius: 30px;
+  border-top: 2px solid #f83d8e;
+  border-bottom: 2px solid #f83d8e;
+}
+
+.about-us-page .team-members .member-cards .member-card .member-img {
+  width: 310px;
+  height: 310px;
+  margin-top: 20px;
+  margin-left: 25px;
+  border-radius: 310px;
+  background: lightgray 0px 0px / 100% 100% no-repeat;
+}
+
+.about-us-page .team-members .member-cards .member-card .member-name {
+  margin-top: 32px;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px; /* 100% */
+  color: #212529;
+}
+
+.about-us-page .team-members .member-cards .member-card .member-job {
+  margin-top: 7px;
+  text-align: center;
+  font-family: Archivo;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  color: #646464;
+}
