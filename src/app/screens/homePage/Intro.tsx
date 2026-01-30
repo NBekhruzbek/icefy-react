@@ -5,7 +5,7 @@ import "../../../css/intro.css";
 
 export default function Intro() {
   return (
-    <div>
+    <div style={{ position: "relative", overflow: "hidden" }}>
       <Container>
         <Box className={"circle-bg"}></Box>
         <img
