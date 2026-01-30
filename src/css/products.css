@@ -1,0 +1,146 @@
+.products {
+  width: 100%;
+  height: auto;
+}
+
+.products .avatar-big-box {
+  width: 100%;
+  position: relative;
+  padding-top: 150px;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.products .avatar-big-box .search-section {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.products .avatar-big-box .search-section .search-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.products .avatar-big-box .search-box .text-field {
+  display: flex;
+  width: 196px;
+  height: 42px;
+  padding: 13.5px 12px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 25px 0 0 25px;
+  border-top: 1px solid #f83d8e;
+  border-bottom: 1px solid #f83d8e;
+  border-left: 1px solid #f83d8e;
+  background: #fff;
+}
+
+.products .avatar-big-box .search-box .search-button {
+  display: flex;
+  width: 39px;
+  height: 42px;
+  padding: 13.5px 12.637px 15.5px 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 0 25px 25px 0;
+  border-top: 1px solid #f83d8e;
+  border-bottom: 1px solid #f83d8e;
+  border-right: 1px solid #f83d8e;
+  background: #fff;
+}
+
+.products .avatar-big-box .category-title {
+  margin-top: -20px;
+  text-align: center;
+  font-family: "Berkshire Swash";
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px; /* 106.667% */
+  color: #f83d8e;
+}
+
+.products .avatar-big-box .filter-section {
+  display: inline-flex;
+  width: 181px;
+  height: 40px;
+  padding: 12px 10px 12px 26px;
+  justify-content: flex-end;
+  align-items: center;
+
+  border-radius: 25px;
+  border: 1px solid #f83d8e;
+  background: #fff;
+}
+
+.products .avatar-big-box .list-category-section {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-top: 90px;
+}
+
+.products .avatar-big-box .list-category-section .category-section {
+  position: relative;
+  width: 340px;
+  height: auto;
+  margin-bottom: 100px;
+  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 30px;
+  border: 1px solid #f83d8e;
+}
+
+.products
+  .avatar-big-box
+  .list-category-section
+  .category-section
+  .category-select {
+  width: 260px;
+  margin: 40px 40px 0 40px;
+  border-radius: 30px;
+  background: #e4f8f7;
+}
+
+.products
+  .avatar-big-box
+  .list-category-section
+  .category-section
+  .category-select
+  .category-select-title {
+  text-align: center;
+  font-family: "Berkshire Swash";
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px;
+  color: #f83d8e;
+}
+
+.products
+  .avatar-big-box
+  .list-category-section
+  .category-section
+  .category-select
+  .radio-group {
+  padding-left: 30px;
+  padding-bottom: 10px;
+}
+
+.products .avatar-big-box .list-category-section .product-cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: 30px;
+  margin-bottom: 90px;
+  gap: 20px;
+}

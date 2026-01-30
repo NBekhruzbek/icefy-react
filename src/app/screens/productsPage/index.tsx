@@ -7,7 +7,7 @@ import "../../../css/products.css";
 export function ProductsPage() {
   const products = useRouteMatch();
   return (
-    <div>
+    <div style={{ background: "#F9E7FA" }}>
       <Switch>
         <Route path={`${products.path}/:productId`}>
           <ChosenProduct />
