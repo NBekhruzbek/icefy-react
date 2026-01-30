@@ -1,0 +1,316 @@
+/* Help Page Main Container */
+.help-page {
+  min-height: 100vh;
+  background: #f5ede0;
+  padding: 40px 0;
+}
+
+.help-container {
+  max-width: 1000px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/* Help Menu - Tabs */
+.help-menu {
+  background: white;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.help-menu .MuiTabs-root {
+  background: white;
+}
+
+.help-menu .MuiTab-root {
+  color: #999999 !important;
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  padding: 18px 32px;
+}
+
+.help-menu .MuiTab-root:hover {
+  color: #333333 !important;
+  background: #f9f9f9;
+}
+
+.help-menu .MuiTab-root.Mui-selected {
+  color: #f83d8e !important;
+}
+
+.help-menu .MuiTabs-indicator {
+  background-color: #f83d8e !important;
+  height: 3px !important;
+}
+
+.help-menu .MuiDivider-root {
+  display: none;
+}
+
+/* Help Main Content */
+.help-main-content {
+  padding: 40px;
+}
+
+/* Accordion Menu */
+.accordion-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.accordion-menu .MuiAccordion-root {
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: none;
+}
+
+.accordion-menu .MuiAccordion-root:hover {
+  border-color: #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.accordion-menu .MuiAccordion-root.Mui-expanded {
+  margin: 0;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.accordion-menu .MuiAccordionSummary-root {
+  padding: 18px 24px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.accordion-menu .MuiAccordionSummary-root:hover {
+  background: #fafafa;
+}
+
+.accordion-menu .MuiAccordionSummary-root.Mui-expanded {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.accordion-menu .MuiAccordionSummary-content {
+  margin: 0;
+}
+
+.accordion-menu .MuiAccordionSummary-expandIconWrapper {
+  color: #d0d0d0;
+  transition: all 0.3s ease;
+}
+
+.accordion-menu .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
+  color: #f83d8e;
+}
+
+.accordion-menu .MuiTypography-root {
+  font-weight: 600;
+  font-size: 15px;
+  color: #333333;
+  letter-spacing: 0.3px;
+}
+
+.accordion-menu .MuiAccordionDetails-root {
+  padding: 20px 24px;
+  background: white;
+}
+
+.accordion-menu .MuiAccordionDetails-root Typography {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* Admin Letter Box - Contact Form */
+.admin-letter-box {
+  padding: 20px 0;
+}
+
+.admin-letter-container {
+  gap: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-letter-frame {
+  background: white;
+  padding: 32px;
+  border-radius: 10px;
+  color: #333333;
+}
+
+.admin-letter-frame:first-child {
+  background: #f9f9f9;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 0;
+}
+
+.admin-letter-frame span {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #333333;
+}
+
+.admin-letter-frame p {
+  font-size: 14px;
+  color: #999999;
+  margin: 0;
+}
+
+/* Contact Form */
+.admin-letter-frame form {
+  background: white;
+  padding: 0;
+  border-radius: 0;
+}
+
+.admin-input-box {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-input-box:last-of-type {
+  margin-bottom: 24px;
+}
+
+.admin-input-box label {
+  font-weight: 600;
+  color: #333333;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.admin-input-box input,
+.admin-input-box textarea {
+  padding: 12px 14px;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: #fafafa;
+  color: #333333;
+}
+
+.admin-input-box input:focus,
+.admin-input-box textarea:focus {
+  outline: none;
+  border-color: #f83d8e;
+  background: white;
+  box-shadow: 0 0 0 2px rgba(248, 61, 142, 0.08);
+}
+
+.admin-input-box input::placeholder,
+.admin-input-box textarea::placeholder {
+  color: #cccccc;
+}
+
+.admin-input-box textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-size: 14px;
+}
+
+/* Submit Button */
+.admin-letter-frame form .MuiButton-root {
+  background: #f83d8e !important;
+  color: white !important;
+  padding: 11px 32px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  border-radius: 8px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: none !important;
+}
+
+.admin-letter-frame form .MuiButton-root:hover {
+  background: #d82a6a !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(248, 61, 142, 0.2) !important;
+}
+
+.admin-letter-frame form .MuiButton-root:active {
+  transform: translateY(0) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .help-container {
+    margin: 20px;
+    border-radius: 12px;
+  }
+
+  .help-main-content {
+    padding: 24px;
+  }
+
+  .help-menu .MuiTab-root {
+    padding: 14px 20px;
+    font-size: 13px;
+  }
+
+  .admin-letter-frame {
+    padding: 24px;
+  }
+
+  .admin-letter-frame span {
+    font-size: 20px;
+  }
+
+  .accordion-menu .MuiAccordionSummary-root {
+    padding: 16px 18px;
+  }
+
+  .accordion-menu .MuiAccordionDetails-root {
+    padding: 16px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .help-container {
+    margin: 10px;
+  }
+
+  .help-main-content {
+    padding: 16px;
+  }
+
+  .help-menu .MuiTab-root {
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+
+  .accordion-menu .MuiTypography-root {
+    font-size: 14px;
+  }
+
+  .admin-input-box input,
+  .admin-input-box textarea {
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+
+  .admin-letter-frame {
+    padding: 18px;
+  }
+
+  .admin-letter-frame span {
+    font-size: 18px;
+  }
+}
