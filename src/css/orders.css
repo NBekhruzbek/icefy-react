@@ -1,0 +1,714 @@
+/* ==================== ORDERS PAGE MAIN STYLES ==================== */
+
+.orders-page {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.order-container {
+  display: flex;
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ==================== LEFT SIDE - ORDERS TAB SECTION ==================== */
+
+.order-left {
+  flex: 1;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.order-left:hover {
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.order-nav-frame {
+  padding: 0;
+}
+
+/* ==================== TAB STYLES ==================== */
+
+.table-list {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+.table-list .MuiTab-root {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  padding: 16px 24px;
+}
+
+.table-list .MuiTab-root:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.table-list .Mui-selected {
+  color: white !important;
+  background: #f768a6;
+  border-radius: 12px 12px 0 0;
+}
+
+.table-list .MuiTabs-indicator {
+  background: #f90101;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+}
+
+/* ==================== MAIN CONTENT AREA ==================== */
+
+.order-main-content {
+  padding: 30px;
+  gap: 20px;
+}
+
+/* ==================== RIGHT SIDE - USER INFO & PAYMENT ==================== */
+
+.order-right {
+  width: 350px;
+  gap: 20px;
+}
+
+/* ==================== INFO BOX STYLES ==================== */
+
+.order-info-box {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.order-info-box:hover {
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+  transform: translateY(-5px);
+}
+
+/* ==================== MEMBER SECTION ==================== */
+
+.member-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.order-user-img {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.order-user-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid #667eea;
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.order-user-icon-box {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 30px;
+  height: 30px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.order-user-prof-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.order-user-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.order-user-prof {
+  font-size: 12px;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== DIVIDER LINE ==================== */
+
+.liner {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+  margin: 16px 0;
+}
+
+/* ==================== ADDRESS SECTION ==================== */
+
+.order-user-address {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.order-user-address svg {
+  color: #f39c12;
+  font-size: 20px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.order-address-txt {
+  flex: 1;
+}
+
+.order-address-txt p {
+  margin: 0;
+  font-size: 13px;
+  color: #d68910;
+  font-weight: 500;
+}
+
+/* ==================== CARD SECTION ==================== */
+
+.card-input {
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.card-half-input {
+  margin: 2px;
+  padding: 14px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 12px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+}
+
+/* ==================== CARDS BOX ==================== */
+
+.cards-box {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.cards-box img {
+  width: 45px;
+  height: 30px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  filter: grayscale(50%);
+  opacity: 0.7;
+}
+
+.cards-box img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+@media (max-width: 1024px) {
+  .order-container {
+    flex-direction: column;
+  }
+
+  .order-right {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .orders-page {
+    padding: 10px;
+  }
+
+  .order-container {
+    gap: 15px;
+  }
+
+  .order-left {
+    border-radius: 15px;
+  }
+
+  .order-nav-frame {
+    border-radius: 15px 15px 0 0;
+  }
+
+  .table-list .MuiTab-root {
+    font-size: 12px;
+    padding: 12px 16px;
+  }
+
+  .order-main-content {
+    padding: 15px;
+  }
+
+  .order-info-box {
+    padding: 16px;
+    border-radius: 15px;
+  }
+}
+
+/* ==================== PAUSED ORDERS MAIN BOX ==================== */
+
+.order-main-box {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+}
+
+.order-main-box:hover {
+  box-shadow: 0 16px 48px rgba(102, 126, 234, 0.15);
+  border-color: #667eea;
+  transform: translateY(-8px);
+}
+
+/* ==================== ORDER SCROLL CONTAINER ==================== */
+
+.order-box-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.order-box-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.order-box-scroll::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 10px;
+}
+
+.order-box-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.order-box-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ==================== ORDER ITEM ==================== */
+
+.orders-name-price {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.orders-name-price:hover {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  transform: translateX(4px);
+  box-shadow: 0 8px 20px rgba(252, 182, 159, 0.3);
+}
+
+.order-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 3px solid white;
+  transition: all 0.3s ease;
+}
+
+.orders-name-price:hover .order-img {
+  transform: scale(1.08);
+  border: 2px solid #f83d8e;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
+}
+
+.product-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2d3748;
+  min-width: 120px;
+  transition: all 0.3s ease;
+}
+
+.orders-name-price:hover .product-title {
+  color: #667eea;
+}
+
+/* ==================== PRICE BOX ==================== */
+
+.price-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 40px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.price-box p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #2d3748;
+  min-width: 25px;
+  text-align: center;
+}
+
+.price-box img {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  filter: brightness(0.8);
+}
+
+.price-box img:hover {
+  transform: scale(1.2) rotate(90deg);
+  filter: brightness(1.2);
+}
+
+.price-box img:last-of-type {
+  margin-right: 8px;
+}
+
+/* ==================== TOTAL PRICE BOX ==================== */
+
+.total-price-box {
+  padding-top: 20px;
+  border-top: 2px solid rgba(102, 126, 234, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== BOX TOTAL ==================== */
+
+.box-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 12px;
+}
+
+.box-total p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.box-total p:nth-child(2),
+.box-total p:nth-child(4),
+.box-total p:nth-child(6) {
+  color: #667eea;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.box-total img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+}
+
+/* ==================== BUTTON STYLES ==================== */
+
+.cancel-button,
+.pay-button {
+  padding: 8px 24px !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.cancel-button::before,
+.pay-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.6s,
+    height 0.6s;
+}
+
+.cancel-button:hover::before,
+.pay-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* CANCEL BUTTON */
+.cancel-button {
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%) !important;
+  color: white !important;
+}
+
+.cancel-button:hover {
+  box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+.cancel-button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3) !important;
+}
+
+/* PAY BUTTON */
+.pay-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  flex: 1;
+}
+
+.pay-button:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+.pay-button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+}
+
+/* ==================== BUTTONS WRAPPER ==================== */
+
+.total-price-box > div:last-of-type,
+.total-price-box > button:nth-last-of-type(1),
+.total-price-box > button:nth-last-of-type(2) {
+  width: 100%;
+}
+
+/* Both buttons in one row */
+.order-main-box .total-price-box {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 14px;
+}
+
+.box-total {
+  grid-column: 1 / -1;
+}
+
+.cancel-button {
+  grid-column: 2;
+}
+
+.pay-button {
+  grid-column: 3;
+}
+
+/* ==================== NO DATA STATE ==================== */
+
+.no-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 20px;
+}
+
+.no-data-container img {
+  width: 300px;
+  height: 300px;
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.no-data-text {
+  font-size: 16px;
+  color: #a0aec0;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+@media (max-width: 768px) {
+  .order-main-box {
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+
+  .orders-name-price {
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    flex-wrap: wrap;
+  }
+
+  .order-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .product-title {
+    min-width: auto;
+    flex: 1;
+  }
+
+  .price-box {
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .box-total {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .order-main-box .total-price-box {
+    grid-template-columns: 1fr;
+  }
+
+  .cancel-button,
+  .pay-button {
+    width: 100% !important;
+    grid-column: auto !important;
+  }
+
+  .cancel-button,
+  .pay-button {
+    padding: 10px 16px !important;
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-main-box {
+    padding: 12px;
+  }
+
+  .order-box-scroll {
+    gap: 12px;
+  }
+
+  .orders-name-price {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .order-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .product-title {
+    font-size: 12px;
+  }
+
+  .price-box p {
+    font-size: 11px;
+  }
+
+  .box-total {
+    padding: 12px;
+  }
+
+  .total-price-box {
+    gap: 10px;
+  }
+}
+
+/* ========================================================= */
+
+.data-campl {
+  width: 40px;
+  height: 30px;
+  background: #667eea;
+}
