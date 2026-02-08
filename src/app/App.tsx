@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { HomePage } from "./screens/homePage";
 import { AboutUsPage } from "./screens/aboutUsPage";
 import { ProductsPage } from "./screens/productsPage";
@@ -42,29 +42,15 @@ function App() {
   return (
     <>
       {getNavbar()}
-      <Switch>
-        <Route path="/about">
-          <AboutUsPage />
-        </Route>
-        <Route path="/products">
-          <ProductsPage />
-        </Route>
-        <Route path="/orders">
-          <OrdersPage />
-        </Route>
-        <Route path="/blog-page">
-          <BlogPage />
-        </Route>
-        <Route path="/help-page">
-          <HelpPage />
-        </Route>
-        <Route path="/user-page">
-          <UsersPage />
-        </Route>
-        <Route path="/">
-          <HomePage />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/products/*" element={<ProductsPage />} />
+        <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/blog-page" element={<BlogPage />} />
+        <Route path="/help-page" element={<HelpPage />} />
+        <Route path="/user-page" element={<UsersPage />} />
+        <Route path="/" element={<HomePage />} />
+      </Routes>
       <Footer />
     </>
   );
