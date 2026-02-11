@@ -97,7 +97,6 @@ export default function ProductCard({
           position: "absolute",
           display: "flex",
           flexDirection: "row",
-          alignItems: "center",
           top: 16,
           left: 16,
           zIndex: 10,
@@ -123,7 +122,22 @@ export default function ProductCard({
           )}
         </IconButton>
         {(likes ?? 0) > 0 ? (
-          <Box sx={{ ml: "8px", color: "red", fontWeight: "550" }}>{likes}</Box>
+          <Box
+            sx={{
+              width: 18,
+              height: 20,
+              textAlign: "center",
+              ml: "-2px",
+              zIndex: 12,
+              fontSize: "14px",
+              borderRadius: "20px",
+              background: "#faf2e9",
+              border: "1px solid #f83d8e",
+              color: "#f83d8e",
+            }}
+          >
+            {likes}
+          </Box>
         ) : null}
       </Box>
 
@@ -219,7 +233,7 @@ export default function ProductCard({
               color: "#f83d8e",
             }}
           >
-            ${price}
+            ${typeof price === "number" && price > 0 ? price.toFixed(2) : null}
           </Typography>
 
           <IconButton

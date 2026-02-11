@@ -1,14 +1,29 @@
 import React from "react";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 
 import SwiperCore from "swiper";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ProductCard from "../../components/cards/BestSellers";
+import { useSelector } from "react-redux";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrieveBestSellers } from "./selector";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
 import "../../../css/bestSellers.css";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 
+/** REDUX SELECTOR */
+const bestSellersRetriever = createSelector(
+  retrieveBestSellers,
+  (bestSellers) => ({
+    bestSellers,
+  }),
+);
+
 export default function BestSellers() {
+  const { bestSellers } = useSelector(bestSellersRetriever);
+
   return (
     <div style={{ paddingBottom: "140px" }}>
       <Container>
@@ -27,46 +42,22 @@ export default function BestSellers() {
             </Box>
           </Stack>
           <Stack className="cards">
-            <ProductCard
-              image="/img/bestSeller1.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
-            <ProductCard
-              image="/img/bestSeller2.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
-            <ProductCard
-              image="/img/bestSeller3.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
-            <ProductCard
-              image="/img/bestSeller4.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
+            {bestSellers.map((product: Product) => {
+              const imagePath = `${serverApi}/${product.productImages[0]}`;
+              return (
+                <ProductCard
+                  _id={product._id}
+                  image={imagePath}
+                  title={product.productName}
+                  description={product.productDesc}
+                  price={product.productPrice}
+                  views={product.productViews}
+                  likes={product.productLikes}
+                  rating={4.9}
+                  width={280}
+                />
+              );
+            })}
           </Stack>
         </Stack>
       </Container>

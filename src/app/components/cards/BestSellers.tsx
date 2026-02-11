@@ -8,35 +8,57 @@ import {
   IconButton,
   Stack,
   Rating,
+  Badge,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import ProductService from "../../services/ProductService";
 
 interface ProductCardProps {
+  _id?: string;
   image?: string;
   title?: string;
   description?: string;
   price?: number;
+  views?: number;
+  likes?: number;
   rating?: number;
-  calories?: number;
   width?: number;
-  height?: number;
 }
 
 export default function ProductCard({
-  image = "/img/ice-cream.png",
-  title = "Chocolate Brownie Sundae",
-  description = "Rich chocolate ice cream with chunks of brownie.",
-  price = 5.49,
-  rating = 4.9,
-  calories = 255,
-  width = 280,
-  height = 420,
+  _id,
+  image,
+  title,
+  description,
+  price,
+  views,
+  likes,
+  rating,
+  width,
 }: ProductCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
-
   const authMember = null;
+  const productService = new ProductService();
+  const [meFavorited, setMeFavorited] = useState(false);
+  const [likess, setLikess] = useState<number>(likes ?? 0);
+
+  const likesHandler = async () => {
+    if (!authMember) {
+      alert("Please LOGIN first!");
+      return;
+    }
+    if (!_id) {
+      alert("Something went wrong!");
+      return;
+    }
+
+    setLikess(likess + 1);
+    await productService.likeToggle(_id);
+
+    setMeFavorited(!meFavorited);
+  };
 
   return (
     <Card
@@ -50,10 +72,28 @@ export default function ProductCard({
         backgroundColor: "#f8f6f9",
       }}
     >
-      {/* Heart Icon - Top Left */}
+      {/* Visibility Icon - bottom right */}
       <Box
         sx={{
           position: "absolute",
+          top: 270,
+          left: 240,
+          zIndex: 10,
+        }}
+      >
+        <Button className="view-btn" sx={{ right: "36px" }}>
+          <Badge badgeContent={views} color="secondary">
+            <RemoveRedEyeIcon
+              sx={{ color: (views ?? 0) > 0 ? "gray" : "white" }}
+            />
+          </Badge>
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          position: "absolute",
+          display: "flex",
+          flexDirection: "row",
           top: 16,
           left: 16,
           zIndex: 10,
@@ -61,18 +101,41 @@ export default function ProductCard({
       >
         <IconButton
           size="small"
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={likesHandler}
           sx={{
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            "&:hover": { backgroundColor: "rgba(255, 255, 255, 1)" },
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            padding: "6px",
+            transition: "all 0.2s ease",
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 1)",
+              transform: "scale(1.1)",
+            },
           }}
         >
-          {isFavorite ? (
-            <FavoriteIcon sx={{ color: "#f83d8e" }} />
+          {meFavorited ? (
+            <FavoriteIcon sx={{ color: "#f83d8e", fontSize: "20px" }} />
           ) : (
-            <FavoriteBorderIcon />
+            <FavoriteBorderIcon sx={{ fontSize: "20px" }} />
           )}
         </IconButton>
+        {(likes ?? 0) > 0 ? (
+          <Box
+            sx={{
+              width: 18,
+              height: 20,
+              textAlign: "center",
+              ml: "-2px",
+              zIndex: 12,
+              fontSize: "14px",
+              borderRadius: "20px",
+              background: "#faf2e9",
+              border: "1px solid #f83d8e",
+              color: "#f83d8e",
+            }}
+          >
+            {likes}
+          </Box>
+        ) : null}
       </Box>
 
       {/* Product Image with Dimension Lines */}
@@ -85,8 +148,9 @@ export default function ProductCard({
           justifyContent: "center",
           margin: "10px",
           paddingTop: "20px",
+          paddingBottom: "20px",
           borderRadius: "20px",
-          background: "#fbe5fb",
+          background: "#fae7cf",
         }}
       >
         {/* Product Image */}
@@ -97,6 +161,7 @@ export default function ProductCard({
             maxWidth: "85%",
             maxHeight: "85%",
             objectFit: "contain",
+            borderRadius: "24px",
           }}
         />
       </Box>
@@ -165,7 +230,7 @@ export default function ProductCard({
               color: "#f83d8e",
             }}
           >
-            ${price.toFixed(2)}
+            ${typeof price === "number" && price > 0 ? price.toFixed(2) : null}
           </Typography>
 
           <IconButton

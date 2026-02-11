@@ -16,17 +16,17 @@ const homePageSlice = createSlice({
       state.classicFavorites = action.payload;
     },
 
-    setbestSellers: (state, action) => {
+    setBestSellers: (state, action) => {
       state.bestSellers = action.payload;
     },
 
-    settopMembers: (state, action) => {
+    setTopMembers: (state, action) => {
       state.topMembers = action.payload;
     },
   },
 });
 
-export const { setClassicFavorites, setbestSellers, settopMembers } =
+export const { setClassicFavorites, setBestSellers, setTopMembers } =
   homePageSlice.actions;
 
 const HomePageReducer = homePageSlice.reducer;

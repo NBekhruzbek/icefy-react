@@ -13,7 +13,7 @@ import { serverApi } from "../../../lib/config";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 
-/** REDUX SLICE & SELECTOR */
+/** REDUX & SELECTOR */
 const classicFavoritesRetriever = createSelector(
   retrieveClassicFavorites,
   (classicFavorites) => ({ classicFavorites }),

@@ -8,7 +8,7 @@ import Instagram from "./Instagram";
 import "../../../css/home.css";
 import TopMembers from "./TopMembers";
 import { Dispatch } from "@reduxjs/toolkit";
-import { setClassicFavorites } from "./slice";
+import { setBestSellers, setClassicFavorites } from "./slice";
 import { Product } from "../../../lib/types/product";
 import { useDispatch } from "react-redux";
 import ProductService from "../../services/ProductService";
@@ -16,10 +16,11 @@ import ProductService from "../../services/ProductService";
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
   setClassicFavorites: (data: Product[]) => dispatch(setClassicFavorites(data)),
+  setBestSellers: (data: Product[]) => dispatch(setBestSellers(data)),
 });
 
 export function HomePage() {
-  const { setClassicFavorites } = actionDispatch(useDispatch());
+  const { setClassicFavorites, setBestSellers } = actionDispatch(useDispatch());
 
   useEffect(() => {
     // Backend serverdan data fetch => Data
@@ -32,6 +33,19 @@ export function HomePage() {
       })
       .then((data) => {
         setClassicFavorites(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    product
+      .getProducts({
+        page: 1,
+        limit: 4,
+        order: "productViews",
+      })
+      .then((data) => {
+        setBestSellers(data);
       })
       .catch((err) => {
         console.log(err);
