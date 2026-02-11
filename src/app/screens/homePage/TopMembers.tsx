@@ -5,15 +5,21 @@ import { CssVarsProvider, Typography } from "@mui/joy";
 import CardOverflow from "@mui/joy/CardOverflow";
 import AspectRatio from "@mui/joy/AspectRatio";
 import "../../../css/topMembers.css";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrieveTopMembers } from "./selector";
+import { useSelector } from "react-redux";
+import { serverApi } from "../../../lib/config";
 
-const activeUsers = [
-  { memberNick: "Lora", memberImage: "/img/topMember1.jpg" },
-  { memberNick: "Justin", memberImage: "/img/topMember2.png" },
-  { memberNick: "Lea", memberImage: "/img/topMember3.jpg" },
-  { memberNick: "John", memberImage: "/img/topMember4.jpg" },
-];
+/** REDUX SELECTOR */
+const topMembersRetriever = createSelector(
+  retrieveTopMembers,
+  (topMembers) => ({
+    topMembers,
+  }),
+);
 
 export default function TopMembers() {
+  const { topMembers } = useSelector(topMembersRetriever);
   return (
     <div className="active-users-frame">
       <Container>
@@ -21,9 +27,9 @@ export default function TopMembers() {
           <Box className="category-title">Active Users</Box>
           <Stack className="cards-frame">
             <CssVarsProvider>
-              {activeUsers.length !== 0 ? (
-                activeUsers.map((member) => {
-                  const imagePath = `${member.memberImage}`;
+              {topMembers.length !== 0 ? (
+                topMembers.map((member) => {
+                  const imagePath = `${serverApi}/${member.memberImage}`;
                   return (
                     <Card variant="outlined" className="card">
                       <CardOverflow>

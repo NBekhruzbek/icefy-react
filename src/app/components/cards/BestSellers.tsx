@@ -150,7 +150,7 @@ export default function ProductCard({
           paddingTop: "20px",
           paddingBottom: "20px",
           borderRadius: "20px",
-          background: "#fae7cf",
+          background: "#eddff1",
         }}
       >
         {/* Product Image */}
