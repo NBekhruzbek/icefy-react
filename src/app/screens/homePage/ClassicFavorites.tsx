@@ -1,15 +1,29 @@
 import React from "react";
-import { Box, Container, Stack, Typography } from "@mui/material";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Box, Container, Stack } from "@mui/material";
 
-import "../../../css/classicFavorites.css";
 import SwiperCore from "swiper";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import ProductCard from "../../components/cards/Favorites";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrieveClassicFavorites } from "./selector";
+import "../../../css/classicFavorites.css";
+import { useSelector } from "react-redux";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 
+/** REDUX SLICE & SELECTOR */
+const classicFavoritesRetriever = createSelector(
+  retrieveClassicFavorites,
+  (classicFavorites) => ({ classicFavorites }),
+);
+
 export default function ClassicFavorites() {
+  const { classicFavorites } = useSelector(classicFavoritesRetriever);
+
+  console.log("classicFavorites:", classicFavorites);
+
   return (
     <div className="fav">
       <Container>
@@ -27,46 +41,22 @@ export default function ClassicFavorites() {
             </Box>
           </Stack>
           <Stack className="cards">
-            <ProductCard
-              image="/img/37.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
-            <ProductCard
-              image="/img/38.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
-            <ProductCard
-              image="/img/40.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
-            <ProductCard
-              image="/img/41.png"
-              title="Chocolate Brownie Sundae"
-              description="Rich chocolate ice cream with chunks of brownie."
-              price={5.49}
-              rating={4.9}
-              calories={255}
-              width={280}
-              height={420}
-            />
+            {classicFavorites.map((ele: Product) => {
+              const imagePath = `${serverApi}/${ele.productImages[0]}`;
+              return (
+                <ProductCard
+                  _id={ele._id}
+                  image={imagePath}
+                  title={ele.productName}
+                  description={ele.productDesc}
+                  price={ele.productPrice}
+                  views={ele.productViews}
+                  likes={ele.productLikes}
+                  rating={4.9}
+                  width={280}
+                />
+              );
+            })}
           </Stack>
         </Stack>
       </Container>
