@@ -44,7 +44,7 @@ export default function ProductCard({
   console.log(likes);
 
   const productService = new ProductService();
-  const [meFavorited, setMeFavorited] = useState(null);
+  const [meFavorited, setMeFavorited] = useState(false);
   const [likess, setLikess] = useState<number>(likes ?? 0);
 
   const likesHandler = async () => {
@@ -59,6 +59,8 @@ export default function ProductCard({
 
     setLikess(likess + 1);
     await productService.likeToggle(_id);
+
+    setMeFavorited(!meFavorited);
   };
 
   return (
@@ -84,7 +86,9 @@ export default function ProductCard({
       >
         <Button className="view-btn" sx={{ right: "36px" }}>
           <Badge badgeContent={views} color="secondary">
-            <RemoveRedEyeIcon sx={{ color: "gray" }} />
+            <RemoveRedEyeIcon
+              sx={{ color: (views ?? 0) > 0 ? "gray" : "white" }}
+            />
           </Badge>
         </Button>
       </Box>
