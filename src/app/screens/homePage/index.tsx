@@ -7,14 +7,27 @@ import Comments from "./Comments";
 import Instagram from "./Instagram";
 import "../../../css/home.css";
 import TopMembers from "./TopMembers";
+import { Dispatch } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
+import { setClassicFavorites } from "./slice";
+import { Product } from "../../../lib/types/product";
+import { retrieveClassicFavorites } from "./selector";
+import { useDispatch, useSelector } from "react-redux";
+
+/** REDUX SLICE & SELECTOR */
+const actionDispatch = (dispatch: Dispatch) => ({
+  setClassicFavorites: (data: Product[]) => dispatch(setClassicFavorites(data)),
+});
+const classicFavoritesRetriever = createSelector(
+  retrieveClassicFavorites,
+  (classicFavorites) => ({ classicFavorites }),
+);
 
 export function HomePage() {
-  // Selector: Store => Data
+  const { setClassicFavorites } = actionDispatch(useDispatch());
+  const { classicFavorites } = useSelector(classicFavoritesRetriever);
 
-  useEffect(() => {
-    // Backend server data request => Data
-    // Slice: Data => Store
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="home-page">
