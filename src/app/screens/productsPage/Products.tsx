@@ -19,7 +19,7 @@ import PaginationItem from "@mui/material/PaginationItem";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { createSelector, Dispatch } from "@reduxjs/toolkit";
-import { Product } from "../../../lib/types/product";
+import { Product, ProductInquery } from "../../../lib/types/product";
 import { setProducts } from "./slice";
 import { retrieveProducts } from "./selector";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +28,7 @@ import {
   ProductCategory,
   ProductFlavor,
 } from "../../../lib/enums/product.enum";
-import { useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { serverApi } from "../../../lib/config";
 
 /** REDUX SLICE & SELECTOR */
@@ -43,22 +43,60 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
 export default function Products() {
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
-
+  const [productSearch, setProductSearch] = useState<ProductInquery>({
+    page: 1,
+    limit: 6,
+    order: "createdAt",
+    productCategory: undefined,
+    productFlavor: undefined,
+    search: "",
+  });
+  const [searchText, setSearchText] = useState<string>("");
   useEffect(() => {
     const product = new ProductService();
 
     product
-      .getProducts({
-        page: 1,
-        limit: 6,
-        order: "createAt",
-        // productCategory: ProductCategory,
-        // productFlavor: ProductFlavor,
-        search: "",
-      })
+      .getProducts(productSearch)
       .then((data) => setProducts(data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [productSearch]);
+
+  useEffect(() => {
+    if (searchText === "") {
+      productSearch.search = "";
+      setProductSearch({ ...productSearch });
+    }
+  }, [searchText]);
+
+  /** HANDLARS */
+
+  const searchCategoryHandler = (category?: ProductCategory) => {
+    productSearch.page = 1;
+    productSearch.productCategory = category;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchFlavorHandler = (flavor?: ProductFlavor) => {
+    productSearch.page = 1;
+    productSearch.productFlavor = flavor;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchOrderHandler = (order: string) => {
+    productSearch.page = 1;
+    productSearch.order = order;
+    setProductSearch({ ...productSearch });
+  };
+
+  const searchProductHandler = () => {
+    productSearch.search = searchText;
+    setProductSearch({ ...productSearch });
+  };
+
+  const paginationHandler = (e: ChangeEvent<any>, value: number) => {
+    productSearch.page = value;
+    setProductSearch({ ...productSearch });
+  };
 
   return (
     <div className="products">
@@ -71,17 +109,46 @@ export default function Products() {
                   placeholder="Search here"
                   disableUnderline
                   className="text-field"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key == "Enter") searchProductHandler();
+                  }}
                 />
-                <Button className="search-button">
+                <Button
+                  className="search-button"
+                  onClick={searchProductHandler}
+                >
                   <SearchIcon />
                 </Button>
               </Box>
               <Box className={"category-title"}>IceFy</Box>
               <Box>
                 <Select defaultValue="new" className={"filter-section"}>
-                  <MenuItem value="new">New</MenuItem>
-                  <MenuItem value="price">Price</MenuItem>
-                  <MenuItem value="views">Views</MenuItem>
+                  <MenuItem
+                    value="new"
+                    onClick={() => searchOrderHandler("createdAt")}
+                  >
+                    New
+                  </MenuItem>
+                  <MenuItem
+                    value="price"
+                    onClick={() => searchOrderHandler("productPrice")}
+                  >
+                    Price
+                  </MenuItem>
+                  <MenuItem
+                    value="views"
+                    onClick={() => searchOrderHandler("productLikes")}
+                  >
+                    Likes
+                  </MenuItem>
+                  <MenuItem
+                    value="views"
+                    onClick={() => searchOrderHandler("productViews")}
+                  >
+                    Views
+                  </MenuItem>
                 </Select>
               </Box>
             </Stack>
@@ -102,29 +169,50 @@ export default function Products() {
                       className="radio-group"
                     >
                       <FormControlLabel
+                        value="NONE"
+                        control={<Radio />}
+                        label="None"
+                        onChange={() => searchCategoryHandler(undefined)}
+                      />
+                      <FormControlLabel
                         value="CLASSIC"
                         control={<Radio />}
                         label="Classic"
+                        onChange={() =>
+                          searchCategoryHandler(ProductCategory.CLASSIC)
+                        }
                       />
                       <FormControlLabel
                         value="PREMIUM"
                         control={<Radio />}
                         label="Premium"
+                        onChange={() =>
+                          searchCategoryHandler(ProductCategory.PREMIUM)
+                        }
                       />
                       <FormControlLabel
                         value="LIMITED"
                         control={<Radio />}
                         label="Limited"
+                        onChange={() =>
+                          searchCategoryHandler(ProductCategory.LIMITED)
+                        }
                       />
                       <FormControlLabel
                         value="KIDS"
                         control={<Radio />}
                         label="Kids"
+                        onChange={() =>
+                          searchCategoryHandler(ProductCategory.KIDS)
+                        }
                       />
                       <FormControlLabel
                         value="OTHER"
                         control={<Radio />}
                         label="Other"
+                        onChange={() =>
+                          searchCategoryHandler(ProductCategory.OTHER)
+                        }
                       />
                     </RadioGroup>
                   </FormControl>
@@ -144,54 +232,90 @@ export default function Products() {
                       className="radio-group"
                     >
                       <FormControlLabel
+                        value="NONE"
+                        control={<Radio />}
+                        label="None"
+                        onChange={() => searchFlavorHandler(undefined)}
+                      />
+                      <FormControlLabel
                         value="VANILLA"
                         control={<Radio />}
                         label="Vanilla"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.VANILLA)
+                        }
                       />
                       <FormControlLabel
                         value="CHOCOLATE"
                         control={<Radio />}
                         label="Chololate"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.CHOCALATE)
+                        }
                       />
                       <FormControlLabel
                         value="STRAWBERRY"
                         control={<Radio />}
                         label="Strawberry"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.STRAWBERRY)
+                        }
                       />
                       <FormControlLabel
                         value="COOKIES_CREAM"
                         control={<Radio />}
                         label="Cookies Cream"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.COOKIES_CREAM)
+                        }
                       />
                       <FormControlLabel
                         value="MANGO"
                         control={<Radio />}
                         label="Mango"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.MANGO)
+                        }
                       />
                       <FormControlLabel
                         value="MATCHA"
                         control={<Radio />}
                         label="Matcha"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.MATCHA)
+                        }
                       />
                       <FormControlLabel
                         value="MINT_CHOCOLATE_CHIP"
                         control={<Radio />}
                         label="Mint Choloate Chip"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.MINT_CHOCOLATE_CHIP)
+                        }
                       />
                       <FormControlLabel
                         value="COFFEE"
                         control={<Radio />}
                         label="Coffee"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.COFFEE)
+                        }
                       />
                       <FormControlLabel
                         value="CARAMEL"
                         control={<Radio />}
                         label="Caramel"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.CARAMEL)
+                        }
                       />
                       <FormControlLabel
                         value="YOGURT"
                         control={<Radio />}
                         label="Yogurt"
+                        onChange={() =>
+                          searchFlavorHandler(ProductFlavor.YOGURT)
+                        }
                       />
                     </RadioGroup>
                   </FormControl>
@@ -218,8 +342,12 @@ export default function Products() {
                 <Stack className="pagination-section">
                   <Pagination
                     sx={{ mt: "35px", ml: "325px" }}
-                    count={3}
-                    page={1}
+                    count={
+                      products.length > 5
+                        ? productSearch.page + 1
+                        : productSearch.page
+                    }
+                    page={productSearch.page}
                     renderItem={(item) => (
                       <PaginationItem
                         components={{
@@ -230,6 +358,7 @@ export default function Products() {
                         color={"primary"}
                       />
                     )}
+                    onChange={paginationHandler}
                   />
                 </Stack>
               </Stack>

@@ -15,6 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ProductService from "../../services/ProductService";
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
   _id?: string;
@@ -42,6 +43,7 @@ export default function ProductCard({
   const productService = new ProductService();
   const [meFavorited, setMeFavorited] = useState(false);
   const [likess, setLikess] = useState<number>(likes ?? 0);
+  const navigate = useNavigate();
 
   const likesHandler = async () => {
     if (!authMember) {
@@ -59,8 +61,15 @@ export default function ProductCard({
     setMeFavorited(!meFavorited);
   };
 
+  const chooseIceCreamHandler = (id: string) => {
+    navigate(`/products/${id}`);
+  };
+
   return (
     <Card
+      onClick={() => {
+        if (_id) chooseIceCreamHandler(_id);
+      }}
       sx={{
         width: "270px",
         height: "380px",
