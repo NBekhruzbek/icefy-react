@@ -22,6 +22,21 @@ class MemberService {
       throw err;
     }
   }
+
+  public async getAdmin(): Promise<Member> {
+    try {
+      let url = `${this.path}/member/getAdmin`;
+
+      const result = await axios.get(url); // axios installed ? useIt : install;
+      console.log("getAdmin:", result);
+
+      const admin: Member = result.data;
+      return admin;
+    } catch (err) {
+      console.log("ERROR, getAdmin:", err);
+      throw err;
+    }
+  }
 }
 
 export default MemberService;

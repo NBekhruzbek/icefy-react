@@ -8,7 +8,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { ChosenProductNavbar } from "../../components/headers/ChosenProduct";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -18,14 +18,20 @@ import { createSelector, Dispatch } from "@reduxjs/toolkit";
 import { setChosenProduct, setRestaurant } from "./slice";
 import { retrieveChosenProduct, retrieveRestaurant } from "./selector";
 import { Product } from "../../../lib/types/product";
+import { Member } from "../../../lib/types/member";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import ProductService from "../../services/ProductService";
+import MemberService from "../../services/MemberService";
+import { serverApi } from "../../../lib/config";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
-  setRestaurant: (data: Product[]) => dispatch(setRestaurant(data)),
-  setChosenProduct: (data: Product[]) => dispatch(setChosenProduct(data)),
+  setRestaurant: (data: Member) => dispatch(setRestaurant(data)),
+  setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
 });
 
-const productsRetriever = createSelector(
+const chosenProductRetriever = createSelector(
   retrieveChosenProduct,
   (chosenProduct) => ({
     chosenProduct,
@@ -40,25 +46,64 @@ const restaurantRetriever = createSelector(
 );
 
 export default function ChosenProduct() {
+  const authMember = null;
+
+  const { productId } = useParams<{ productId: string }>();
+  const { setRestaurant, setChosenProduct } = actionDispatch(useDispatch());
+  const { chosenProduct } = useSelector(chosenProductRetriever);
+  const { restaurant } = useSelector(restaurantRetriever);
+
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [meFavorited, setMeFavorited] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  const images = [
-    "/img/AlmondJoySundae.jpg",
-    "/img/BerrySorbet.jpg",
-    "/img/ChocolateFudge.jpg",
-    "/img/DairyFreeAlmond.jpg",
-    "/img/DairyFreeClassic.jpg",
-  ];
+  const [likess, setLikess] = useState<number>(
+    chosenProduct?.productLikes ?? 0,
+  );
 
-  const thumbnails = [
-    "/img/AlmondJoySundae.jpg",
-    "/img/BerrySorbet.jpg",
-    "/img/ChocolateFudge.jpg",
-    "/img/DairyFreeAlmond.jpg",
-    "/img/DairyFreeClassic.jpg",
-  ];
+  useEffect(() => {
+    const product = new ProductService();
+    const member = new MemberService();
+
+    if (productId) {
+      product
+        .getProduct(productId)
+        .then((data) => setChosenProduct(data))
+        .catch((err) => console.log(err));
+
+      member
+        .getAdmin()
+        .then((data) => setRestaurant(data))
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
+  const productService = new ProductService();
+
+  const likesHandler = async () => {
+    if (!authMember) {
+      alert("Please LOGIN first!");
+      return;
+    }
+    if (!chosenProduct?._id) {
+      alert("Something went wrong!");
+      return;
+    }
+
+    setLikess(likess + 1);
+    await productService.likeToggle(chosenProduct._id);
+
+    setMeFavorited(!meFavorited);
+  };
+  if (!chosenProduct) return null;
+
+  const images = chosenProduct.productImages.map((ele) => {
+    return `${serverApi}/${ele}`;
+  });
+
+  const thumbnails = chosenProduct.productImages.map((ele) => {
+    return `${serverApi}/${ele}`;
+  });
 
   return (
     <div style={{ background: "#ecf6f6" }}>
@@ -131,29 +176,60 @@ export default function ChosenProduct() {
               alignItems: "center",
               justifyContent: "center",
               minWidth: "500px",
-              height: "auto",
+              height: "550px",
               borderRadius: "40px",
             }}
           >
             {/* Heart Icon */}
-            <IconButton
-              onClick={() => setIsFavorite(!isFavorite)}
+            <Box
               sx={{
                 position: "absolute",
-                top: 20,
-                right: 20,
-                backgroundColor: "rgba(255, 255, 255, 0.9)",
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 1)",
-                },
+                display: "flex",
+                flexDirection: "row",
+                top: 48,
+                right: 30,
+                zIndex: 10,
               }}
             >
-              {isFavorite ? (
-                <FavoriteIcon sx={{ color: "#f83d8e" }} />
-              ) : (
-                <FavoriteBorderIcon />
-              )}
-            </IconButton>
+              <IconButton
+                size="small"
+                onClick={likesHandler}
+                sx={{
+                  backgroundColor: "#f4eddd",
+                  padding: "6px",
+                  transition: "all 0.2s ease",
+                  "&:hover": {
+                    backgroundColor: "rgb(232, 208, 208)",
+                    transform: "scale(1.1)",
+                  },
+                }}
+              >
+                {meFavorited ? (
+                  <FavoriteIcon sx={{ color: "#f83d8e", fontSize: "30px" }} />
+                ) : (
+                  <FavoriteBorderIcon sx={{ fontSize: "30px" }} />
+                )}
+              </IconButton>
+              {(chosenProduct.productLikes ?? 0) > 0 ? (
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 27,
+                    textAlign: "center",
+                    ml: "-6px",
+                    mt: "-4px",
+                    zIndex: 12,
+                    fontSize: "18px",
+                    borderRadius: "20px",
+                    background: "#faf2e9",
+                    border: "1px solid #f83d8e",
+                    color: "#f83d8e",
+                  }}
+                >
+                  {chosenProduct.productLikes}
+                </Box>
+              ) : null}
+            </Box>
 
             {/* Main Image */}
             <img
@@ -190,14 +266,14 @@ export default function ChosenProduct() {
                 color: "#0f0200",
               }}
             >
-              Chocolate Brownie Sundae
+              {chosenProduct?.productName}
             </Typography>
 
             {/* Rating */}
             <Stack direction="row" alignItems="center" gap={1}>
-              <Rating value={4.9} precision={0.1} readOnly />
+              <Rating value={4.4} precision={0.1} readOnly />
               <Typography sx={{ fontWeight: "600", color: "#646464" }}>
-                4.9 (245 reviews)
+                4.4 ({chosenProduct.productViews} reviews)
               </Typography>
             </Stack>
 
@@ -209,7 +285,11 @@ export default function ChosenProduct() {
                 color: "#f83d8e",
               }}
             >
-              $5.49
+              $
+              {typeof chosenProduct?.productPrice === "number" &&
+              chosenProduct?.productPrice > 0
+                ? chosenProduct?.productPrice.toFixed(2)
+                : null}
             </Typography>
 
             {/* Description */}
@@ -220,9 +300,7 @@ export default function ChosenProduct() {
                 lineHeight: "1.6",
               }}
             >
-              Rich chocolate ice cream with chunks of brownie, topped with
-              whipped cream and a cherry. Perfect for those who love indulgent
-              desserts.
+              {chosenProduct?.productDesc}
             </Typography>
 
             {/* Details */}
@@ -232,16 +310,20 @@ export default function ChosenProduct() {
               </Typography>
               <Stack direction="row" justifyContent="space-between">
                 <Typography sx={{ color: "#646464" }}>Category:</Typography>
-                <Typography sx={{ fontWeight: "600" }}>Kids</Typography>
+                <Typography sx={{ fontWeight: "600" }}>
+                  {chosenProduct.productCategory}
+                </Typography>
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography sx={{ color: "#646464" }}>Size:</Typography>
-                <Typography sx={{ fontWeight: "600" }}>Standard</Typography>
+                <Typography sx={{ fontWeight: "600" }}>
+                  {chosenProduct.productSize}
+                </Typography>
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography sx={{ color: "#646464" }}>Availability:</Typography>
                 <Typography sx={{ fontWeight: "600", color: "#4caf50" }}>
-                  In Stock
+                  {chosenProduct.productLeftCount}
                 </Typography>
               </Stack>
             </Stack>
@@ -314,17 +396,38 @@ export default function ChosenProduct() {
             {/* Share */}
             <Typography
               sx={{
-                textAlign: "center",
-                color: "#646464",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "start",
+                alignItems: "center",
                 fontSize: "14px",
                 cursor: "pointer",
+                color: "#646464",
                 "&:hover": {
                   color: "#f83d8e",
                   textDecoration: "underline",
                 },
               }}
             >
-              Share this product
+              <span style={{ marginLeft: "20px" }}>
+                {restaurant?.memberType}:
+              </span>
+              <img
+                src={`${serverApi}/${restaurant?.memberImage}`}
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "22px",
+                  marginLeft: "20px",
+                }}
+                alt=""
+              />
+              <span style={{ marginLeft: "20px" }}>
+                {restaurant?.memberNick} -
+              </span>
+              <span style={{ marginLeft: "5px" }}>
+                {restaurant?.memberPhone}
+              </span>
             </Typography>
           </Box>
         </Stack>
