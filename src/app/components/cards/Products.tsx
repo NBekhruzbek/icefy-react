@@ -14,29 +14,50 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import ProductService from "../../services/ProductService";
 
 interface ProductCardProps {
+  _id?: string;
   image?: string;
   title?: string;
   description?: string;
   price?: number;
-  like?: boolean;
-  view?: number;
+  likes?: number;
+  views?: number;
   rating?: number;
-  calories?: number;
 }
 
 export default function ProductCard({
-  image = "/img/ice-cream.png",
-  title = "Chocolate Brownie Sundae",
-  description = "Rich chocolate ice cream with chunks of brownie.",
-  price = 5.49,
-  like = false,
-  view = 0,
-  rating = 4.9,
-  calories = 255,
+  _id,
+  image,
+  title,
+  description,
+  price,
+  likes,
+  views,
+  rating,
 }: ProductCardProps) {
   const authMember = null;
+
+  const productService = new ProductService();
+  const [meFavorited, setMeFavorited] = useState(false);
+  const [likess, setLikess] = useState<number>(likes ?? 0);
+
+  const likesHandler = async () => {
+    if (!authMember) {
+      alert("Please LOGIN first!");
+      return;
+    }
+    if (!_id) {
+      alert("Something went wrong!");
+      return;
+    }
+
+    setLikess(likess + 1);
+    await productService.likeToggle(_id);
+
+    setMeFavorited(!meFavorited);
+  };
 
   return (
     <Card
@@ -45,7 +66,7 @@ export default function ProductCard({
         height: "380px",
         borderRadius: "16px",
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-        backgroundColor: "#e7f6f6",
+        backgroundColor: "#fff",
         display: "flex",
         flexDirection: "column",
         transition: "all 0.3s ease",
@@ -57,59 +78,86 @@ export default function ProductCard({
         position: "relative",
       }}
     >
-      {/* Heart Icon - Top Left */}
+      {/* Heart Icon & Views Icon */}
       <Box
         sx={{
           position: "absolute",
-          top: 208,
-          left: 228,
-          zIndex: 10,
-        }}
-      >
-        <Button className="view-btn" sx={{ right: "36px" }}>
-          <Badge badgeContent={view} color="secondary">
-            <RemoveRedEyeIcon sx={{ color: view > 0 ? "gray" : "white" }} />
-          </Badge>
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          top: 155,
-          left: 210,
+          display: "flex",
+          flexDirection: "row",
+          top: 220,
+          left: 215,
           zIndex: 10,
         }}
       >
         <IconButton
           size="small"
+          onClick={likesHandler}
           sx={{
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            backgroundColor: "#f4eddd",
             padding: "6px",
             transition: "all 0.2s ease",
             "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 1)",
+              backgroundColor: "rgb(232, 208, 208)",
               transform: "scale(1.1)",
             },
           }}
         >
-          {like ? (
+          {!meFavorited ? (
             <FavoriteIcon sx={{ color: "#f83d8e", fontSize: "20px" }} />
           ) : (
             <FavoriteBorderIcon sx={{ fontSize: "20px" }} />
           )}
         </IconButton>
+        {(likes ?? 0) > 0 ? (
+          <Box
+            sx={{
+              width: 18,
+              height: 20,
+              textAlign: "center",
+              ml: "-6px",
+              mt: "-4px",
+              zIndex: 12,
+              fontSize: "14px",
+              borderRadius: "20px",
+              background: "#faf2e9",
+              border: "1px solid #f83d8e",
+              color: "#f83d8e",
+            }}
+          >
+            {likes}
+          </Box>
+        ) : null}
+      </Box>
+      <Box
+        sx={{
+          position: "absolute",
+          top: 165,
+          right: -30,
+          zIndex: 10,
+        }}
+      >
+        <Button className="view-btn" sx={{ right: "36px" }}>
+          <Badge badgeContent={views} color="secondary">
+            <RemoveRedEyeIcon
+              sx={{ color: (views ?? 0) > 0 ? "gray" : "white" }}
+            />
+          </Badge>
+        </Button>
       </Box>
 
       {/* Product Image */}
       <Box
         sx={{
-          height: "200px",
+          position: "relative",
+          height: "190px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          mt: "10px",
-          backgroundColor: "#e7f6f6",
-          overflow: "hidden",
+          margin: "10px",
+          paddingTop: "10px",
+          paddingBottom: "10px",
+          borderRadius: "20px",
+          background: "#f4eddd",
         }}
       >
         <img
@@ -213,7 +261,7 @@ export default function ProductCard({
               color: "#f83d8e",
             }}
           >
-            ${price.toFixed(2)}
+            ${typeof price === "number" && price > 0 ? price.toFixed(2) : null}
           </Typography>
 
           <IconButton
