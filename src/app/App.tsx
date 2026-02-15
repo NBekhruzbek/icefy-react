@@ -14,16 +14,22 @@ import { OrdersNavbar } from "./components/headers/OrdersNavbar";
 import { BlogNavbar } from "./components/headers/BlogNavbar";
 import { HelpNavbar } from "./components/headers/HelpNavbar";
 import { UserNavbar } from "./components/headers/UserNavbar";
+import HelpPage from "./screens/helpPage";
+import useBasket from "./hooks/useBasket";
 import "../css/app.css";
 import "../css/navbar.css";
-import HelpPage from "./screens/helpPage";
-import { CartItem } from "../lib/types/search";
-import useBasket from "./hooks/useBasket";
+import AuthenticationModal from "./components/auth";
 
 function App() {
   const location = useLocation();
 
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
+  const [signupOpen, setSignupOpen] = useState<boolean>(false);
+  const [loginOpen, setLoginOpen] = useState<boolean>(false);
+
+  /** HANDLERS */
+  const handleSignupClose = () => setSignupOpen(false);
+  const handleLoginClose = () => setLoginOpen(false);
 
   const getNavbar = () => {
     if (location.pathname === "/about") {
@@ -123,6 +129,13 @@ function App() {
         <Route path="/" element={<HomePage />} />
       </Routes>
       <Footer />
+
+      <AuthenticationModal
+        signupOpen={signupOpen}
+        loginOpen={loginOpen}
+        handleLoginClose={handleLoginClose}
+        handleSignupClose={handleSignupClose}
+      />
     </>
   );
 }
