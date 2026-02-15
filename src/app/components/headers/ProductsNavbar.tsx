@@ -11,9 +11,11 @@ interface ProducsNavbarProps {
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
+  setLoginOpen: (isOpen: boolean) => void;
 }
 export function ProductsNavbar(props: ProducsNavbarProps) {
-  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll, setLoginOpen } =
+    props;
   const authMember = null;
   return (
     <div
@@ -99,6 +101,7 @@ export function ProductsNavbar(props: ProducsNavbarProps) {
                 <Button
                   variant="contained"
                   style={{ background: "#F83D8E", color: "#f8f8ff" }}
+                  onClick={() => setLoginOpen(true)}
                 >
                   Login
                 </Button>

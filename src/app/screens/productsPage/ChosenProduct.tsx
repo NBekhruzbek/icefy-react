@@ -52,10 +52,12 @@ interface ChosenProductProps {
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
+  setLoginOpen: (isOpen: boolean) => void;
 }
 
 export default function ChosenProduct(props: ChosenProductProps) {
-  const { onAdd, cartItems, onRemove, onDelete, onDeleteAll } = props;
+  const { onAdd, cartItems, onRemove, onDelete, onDeleteAll, setLoginOpen } =
+    props;
 
   const authMember = null;
 
@@ -124,6 +126,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
         onRemove={onRemove}
         onDelete={onDelete}
         onDeleteAll={onDeleteAll}
+        setLoginOpen={setLoginOpen}
       />
       <Container maxWidth="lg">
         <Stack

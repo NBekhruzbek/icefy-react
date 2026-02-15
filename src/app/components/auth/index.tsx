@@ -6,6 +6,11 @@ import Fade from "@material-ui/core/Fade";
 import { Fab, Stack, TextField } from "@mui/material";
 import styled from "styled-components";
 import LoginIcon from "@mui/icons-material/Login";
+import { Messages } from "../../../lib/config";
+import MemberService from "../../services/MemberService";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { T } from "../../../lib/types/common";
+import { MemberInput } from "../../../lib/types/member";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -319,32 +324,50 @@ interface AuthenticationModalProps {
 export default function AuthenticationModal(props: AuthenticationModalProps) {
   const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
   const classes = useStyles();
-  const [signupData, setSignupData] = useState({
-    username: "",
-    phone: "",
-    password: "",
-  });
-  const [loginData, setLoginData] = useState({
-    username: "",
-    password: "",
-  });
+  const [memberNick, setMemberNick] = useState<string>("");
+  const [memberPhone, setMemberPhone] = useState<string>("");
+  const [memberPassword, setMemberPassword] = useState<string>("");
 
-  const handleSignupChange = (field: string) => (e: any) => {
-    setSignupData({ ...signupData, [field]: e.target.value });
+  /** HANDLERS **/
+
+  const handleUserName = (e: T) => {
+    setMemberNick(e.target.value);
+  };
+  const handlePhone = (e: T) => {
+    setMemberPhone(e.target.value);
+  };
+  const handlePassword = (e: T) => {
+    setMemberPassword(e.target.value);
   };
 
-  const handleLoginChange = (field: string) => (e: any) => {
-    setLoginData({ ...loginData, [field]: e.target.value });
+  const handlePasswordKeyDown = (e: T) => {
+    if (e.key === "Enter" && signupOpen) {
+      handleSignupRequest().then();
+    }
   };
 
-  const handleSignupSubmit = () => {
-    console.log("Signup:", signupData);
-    // Handle signup logic here
-  };
+  const handleSignupRequest = async () => {
+    try {
+      console.log("inputs: ", memberNick, memberPhone, memberPassword);
+      const isFulfill =
+        memberNick !== "" && memberPhone !== "" && memberPassword !== "";
+      if (!isFulfill) throw new Error(Messages.error3);
 
-  const handleLoginSubmit = () => {
-    console.log("Login:", loginData);
-    // Handle login logic here
+      const signupInput: MemberInput = {
+        memberNick: memberNick,
+        memberPhone: memberPhone,
+        memberPassword: memberPassword,
+      };
+
+      const member = new MemberService();
+      const result = await member.signup(signupInput);
+
+      handleSignupClose();
+    } catch (err) {
+      console.log(err);
+      handleSignupClose();
+      sweetErrorHandling(err).then().catch();
+    }
   };
 
   return (
@@ -392,16 +415,14 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                 id="signup-username"
                 label="Username"
                 variant="outlined"
-                value={signupData.username}
-                onChange={handleSignupChange("username")}
+                onChange={handleUserName}
                 placeholder="Your sweet name"
               />
               <StyledTextField
                 id="signup-phone"
                 label="Phone Number"
                 variant="outlined"
-                value={signupData.phone}
-                onChange={handleSignupChange("phone")}
+                onChange={handlePhone}
                 placeholder="010 ..."
               />
               <StyledTextField
@@ -409,14 +430,14 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                 label="Password"
                 variant="outlined"
                 type="password"
-                value={signupData.password}
-                onChange={handleSignupChange("password")}
+                onChange={handlePassword}
+                onKeyDown={handlePasswordKeyDown}
                 placeholder="Keep it sweet & strong"
               />
               <CuteButton
                 variant="extended"
                 color="primary"
-                onClick={handleSignupSubmit}
+                onClick={handleSignupRequest}
               >
                 <LoginIcon sx={{ mr: 1 }} />
                 Sign Up
@@ -469,8 +490,8 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                 id="login-username"
                 label="Username"
                 variant="outlined"
-                value={loginData.username}
-                onChange={handleLoginChange("username")}
+                // value={loginData.username}
+                // onChange={handleLoginChange("username")}
                 placeholder="Your sweet name"
               />
               <StyledTextField
@@ -478,14 +499,14 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                 label="Password"
                 variant="outlined"
                 type="password"
-                value={loginData.password}
-                onChange={handleLoginChange("password")}
+                // value={loginData.password}
+                // onChange={handleLoginChange("password")}
                 placeholder="Your secret password"
               />
               <CuteButton
                 variant="extended"
                 color="primary"
-                onClick={handleLoginSubmit}
+                // onClick={handleLoginSubmit}
               >
                 <LoginIcon sx={{ mr: 1 }} />
                 Login

@@ -10,10 +10,12 @@ interface ProductsPageProps {
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
+  setLoginOpen: (isOpen: boolean) => void;
 }
 
 export function ProductsPage(props: ProductsPageProps) {
-  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll, setLoginOpen } =
+    props;
 
   return (
     <div style={{ background: "#F9E7FA" }}>
@@ -28,6 +30,7 @@ export function ProductsPage(props: ProductsPageProps) {
               onRemove={onRemove}
               onDelete={onDelete}
               onDeleteAll={onDeleteAll}
+              setLoginOpen={setLoginOpen}
             />
           }
         />

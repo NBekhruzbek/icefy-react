@@ -40,6 +40,7 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
+          setLoginOpen={setLoginOpen}
         />
       );
     } else if (location.pathname === "/products") {
@@ -50,6 +51,7 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
+          setLoginOpen={setLoginOpen}
         />
       );
     } else if (location.pathname === "/orders") {
@@ -60,6 +62,7 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
+          setLoginOpen={setLoginOpen}
         />
       );
     } else if (location.pathname === "/blog-page") {
@@ -70,6 +73,7 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
+          setLoginOpen={setLoginOpen}
         />
       );
     } else if (location.pathname === "/help-page") {
@@ -80,6 +84,7 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
+          setLoginOpen={setLoginOpen}
         />
       );
     } else if (location.pathname === "/user-page") {
@@ -90,6 +95,7 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
+          setLoginOpen={setLoginOpen}
         />
       );
     } else if (location.pathname === "/") {
@@ -100,6 +106,8 @@ function App() {
           onRemove={onRemove}
           onDelete={onDelete}
           onDeleteAll={onDeleteAll}
+          setSignupOpen={setSignupOpen}
+          setLoginOpen={setLoginOpen}
         />
       );
     }
@@ -119,6 +127,7 @@ function App() {
               onRemove={onRemove}
               onDelete={onDelete}
               onDeleteAll={onDeleteAll}
+              setLoginOpen={setLoginOpen}
             />
           }
         />
