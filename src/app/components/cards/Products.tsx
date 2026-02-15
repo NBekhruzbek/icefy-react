@@ -16,6 +16,8 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ProductService from "../../services/ProductService";
 import { useNavigate } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
+import { serverApi } from "../../../lib/config";
 
 interface ProductCardProps {
   _id?: string;
@@ -26,6 +28,7 @@ interface ProductCardProps {
   likes?: number;
   views?: number;
   rating?: number;
+  onAdd: (item: CartItem) => void;
 }
 
 export default function ProductCard({
@@ -37,8 +40,10 @@ export default function ProductCard({
   likes,
   views,
   rating,
+  onAdd,
 }: ProductCardProps) {
   const authMember = null;
+  const imagePath = `${serverApi}/${image}`;
 
   const productService = new ProductService();
   const [meFavorited, setMeFavorited] = useState(false);
@@ -179,7 +184,7 @@ export default function ProductCard({
         }}
       >
         <img
-          src={image}
+          src={imagePath}
           alt={title}
           style={{
             maxWidth: "100%",
@@ -297,6 +302,17 @@ export default function ProductCard({
               "&:active": {
                 transform: "scale(0.98)",
               },
+            }}
+            onClick={(e) => {
+              console.log("CART BUTTON PRESSED!");
+              onAdd({
+                _id: _id,
+                quantity: 1,
+                name: title,
+                price: price,
+                image: image,
+              });
+              e.stopPropagation();
             }}
           >
             <ShoppingCartIcon fontSize="small" />

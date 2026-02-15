@@ -3,8 +3,14 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import "../../../css/otherNavbar.css";
 import Basket from "./Basket";
+import { CartItem } from "../../../lib/types/search";
 
-export function BlogNavbar() {
+interface BlogNavbarProps {
+  cartItems: CartItem[];
+}
+export function BlogNavbar(props: BlogNavbarProps) {
+  const { cartItems } = props;
+
   const authMember = null;
   return (
     <div
@@ -77,7 +83,7 @@ export function BlogNavbar() {
               </NavLink>
             </Box>
             {/** BASKET */}
-            <Basket />
+            <Basket cartItems={cartItems} />
 
             {!authMember ? (
               <Box>

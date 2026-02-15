@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
 import { serverApi } from "../../../lib/config";
+import { CartItem } from "../../../lib/types/search";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -45,7 +46,14 @@ const restaurantRetriever = createSelector(
   }),
 );
 
-export default function ChosenProduct() {
+interface ChosenProductProps {
+  onAdd: (item: CartItem) => void;
+  cartItems: CartItem[];
+}
+
+export default function ChosenProduct(props: ChosenProductProps) {
+  const { onAdd, cartItems } = props;
+
   const authMember = null;
 
   const { productId } = useParams<{ productId: string }>();
@@ -107,7 +115,7 @@ export default function ChosenProduct() {
 
   return (
     <div style={{ background: "#ecf6f6" }}>
-      <ChosenProductNavbar />
+      <ChosenProductNavbar cartItems={cartItems} />
       <Container maxWidth="lg">
         <Stack
           direction="row"
@@ -387,6 +395,20 @@ export default function ChosenProduct() {
                   backgroundColor: "#5a3ba0",
                 },
                 transition: "all 0.3s ease",
+              }}
+              onClick={(e) => {
+                console.log(
+                  "CART BUTTON PRESSED!",
+                  chosenProduct.productImages[0],
+                );
+                onAdd({
+                  _id: chosenProduct._id,
+                  quantity: 1,
+                  name: chosenProduct.productName,
+                  price: chosenProduct.productPrice,
+                  image: chosenProduct.productImages[0],
+                });
+                e.stopPropagation();
               }}
               startIcon={<ShoppingCartIcon />}
             >

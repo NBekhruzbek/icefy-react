@@ -30,6 +30,7 @@ import {
 } from "../../../lib/enums/product.enum";
 import { ChangeEvent, useEffect, useState } from "react";
 import { serverApi } from "../../../lib/config";
+import { CartItem } from "../../../lib/types/search";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -40,7 +41,13 @@ const productsRetriever = createSelector(retrieveProducts, (products) => ({
   products,
 }));
 
-export default function Products() {
+interface ProductsProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function Products(props: ProductsProps) {
+  const { onAdd } = props;
+
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
   const [productSearch, setProductSearch] = useState<ProductInquery>({
@@ -324,17 +331,17 @@ export default function Products() {
               <Stack className="product-cards">
                 {products.length !== 0
                   ? products.map((product: Product) => {
-                      const imagePath = `${serverApi}/${product.productImages[0]}`;
                       return (
                         <ProductCard
                           _id={product._id}
-                          image={imagePath}
+                          image={product.productImages[0]}
                           title={product.productName}
                           description="Rich chocolate ice cream with chunks of brownie."
                           price={product.productPrice}
                           likes={product.productLikes}
                           views={product.productViews}
                           rating={4.9}
+                          onAdd={onAdd}
                         />
                       );
                     })
