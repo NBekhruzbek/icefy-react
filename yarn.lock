@@ -2701,6 +2701,13 @@
   resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.7.tgz#baccb07a970b91707df3a3e8ba6896c57ead2d11"
   integrity sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==
 
+"@types/universal-cookie@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/universal-cookie/-/universal-cookie-3.0.0.tgz#7bca042a6c1c4a86b7c0c0f22ae55ae4a497f9fd"
+  integrity sha512-EnipDS8yUDYvcyN7jVJYOK29zvJwsnVLUZoGtozjOzkM31ZfJSDrtofraIgoi7eagCHLXwrspqsFOHTtpcHFDg==
+  dependencies:
+    universal-cookie "*"
+
 "@types/use-sync-external-store@^0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@types/use-sync-external-store/-/use-sync-external-store-0.0.3.tgz#b6725d5f4af24ace33b36fafd295136e75509f43"
@@ -3981,7 +3988,7 @@ cookie-signature@~1.0.6:
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.7.tgz#ab5dd7ab757c54e60f37ef6550f481c426d10454"
   integrity sha512-NXdYc3dLr47pBkpUCHtKSwIOQXLVn8dZEuywboCOJY/osA0wFSLlSawr3KN8qXJEyX66FcONTH8EIlVuK0yyFA==
 
-cookie@^1.0.1:
+cookie@^1.0.1, cookie@^1.0.2:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-1.1.1.tgz#3bb9bdfc82369db9c2f69c93c9c3ceb310c88b3c"
   integrity sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==
@@ -10100,6 +10107,13 @@ unique-string@^2.0.0:
   integrity sha512-uNaeirEPvpZWSgzwsPGtU2zVSTrn/8L5q/IexZmH0eH6SA73CmAA5U4GwORTxQAZs95TAXLNqeLoPPNO5gZfWg==
   dependencies:
     crypto-random-string "^2.0.0"
+
+universal-cookie@*, universal-cookie@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/universal-cookie/-/universal-cookie-8.0.1.tgz#19263fcda6889978a081c610a90fc395eeaeec64"
+  integrity sha512-B6ks9FLLnP1UbPPcveOidfvB9pHjP+wekP2uRYB9YDfKVpvcjKgy1W5Zj+cEXJ9KTPnqOKGfVDQBmn8/YCQfRg==
+  dependencies:
+    cookie "^1.0.2"
 
 universalify@^0.2.0:
   version "0.2.0"

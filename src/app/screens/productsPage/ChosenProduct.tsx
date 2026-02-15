@@ -25,6 +25,7 @@ import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
 import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
+import { useGlobals } from "../../hooks/useGlobals";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -53,13 +54,27 @@ interface ChosenProductProps {
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
   setLoginOpen: (isOpen: boolean) => void;
+  handleLogoutClick: (e: React.MouseEvent<HTMLElement>) => void;
+  anchorEl: HTMLElement | null;
+  handleCloseLogout: () => void;
+  handleLogoutRequest: () => void;
 }
 
 export default function ChosenProduct(props: ChosenProductProps) {
-  const { onAdd, cartItems, onRemove, onDelete, onDeleteAll, setLoginOpen } =
-    props;
+  const {
+    onAdd,
+    cartItems,
+    onRemove,
+    onDelete,
+    onDeleteAll,
+    setLoginOpen,
+    handleLogoutClick,
+    anchorEl,
+    handleCloseLogout,
+    handleLogoutRequest,
+  } = props;
 
-  const authMember = null;
+  const { authMember } = useGlobals();
 
   const { productId } = useParams<{ productId: string }>();
   const { setRestaurant, setChosenProduct } = actionDispatch(useDispatch());
@@ -127,6 +142,10 @@ export default function ChosenProduct(props: ChosenProductProps) {
         onDelete={onDelete}
         onDeleteAll={onDeleteAll}
         setLoginOpen={setLoginOpen}
+        anchorEl={anchorEl}
+        handleLogoutClick={handleLogoutClick}
+        handleCloseLogout={handleCloseLogout}
+        handleLogoutRequest={handleLogoutRequest}
       />
       <Container maxWidth="lg">
         <Stack

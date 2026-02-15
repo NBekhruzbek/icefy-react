@@ -11,11 +11,25 @@ interface ProductsPageProps {
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
   setLoginOpen: (isOpen: boolean) => void;
+  handleLogoutClick: (e: React.MouseEvent<HTMLElement>) => void;
+  anchorEl: HTMLElement | null;
+  handleCloseLogout: () => void;
+  handleLogoutRequest: () => void;
 }
 
 export function ProductsPage(props: ProductsPageProps) {
-  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll, setLoginOpen } =
-    props;
+  const {
+    cartItems,
+    onAdd,
+    onRemove,
+    onDelete,
+    onDeleteAll,
+    setLoginOpen,
+    handleLogoutClick,
+    anchorEl,
+    handleCloseLogout,
+    handleLogoutRequest,
+  } = props;
 
   return (
     <div style={{ background: "#F9E7FA" }}>
@@ -31,6 +45,10 @@ export function ProductsPage(props: ProductsPageProps) {
               onDelete={onDelete}
               onDeleteAll={onDeleteAll}
               setLoginOpen={setLoginOpen}
+              anchorEl={anchorEl}
+              handleLogoutClick={handleLogoutClick}
+              handleCloseLogout={handleCloseLogout}
+              handleLogoutRequest={handleLogoutRequest}
             />
           }
         />
