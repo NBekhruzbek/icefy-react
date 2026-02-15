@@ -5,12 +5,15 @@ import { CartItem } from "../../../lib/types/search";
 import "../../../css/products.css";
 
 interface ProductsPageProps {
-  onAdd: (item: CartItem) => void;
   cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
 export function ProductsPage(props: ProductsPageProps) {
-  const { onAdd, cartItems } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
 
   return (
     <div style={{ background: "#F9E7FA" }}>
@@ -18,7 +21,15 @@ export function ProductsPage(props: ProductsPageProps) {
         <Route index element={<Products onAdd={onAdd} />} />
         <Route
           path=":productId"
-          element={<ChosenProduct onAdd={onAdd} cartItems={cartItems} />}
+          element={
+            <ChosenProduct
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
+          }
         />
       </Routes>
     </div>

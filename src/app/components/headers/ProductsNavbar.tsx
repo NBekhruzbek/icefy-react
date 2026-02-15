@@ -7,9 +7,13 @@ import { CartItem } from "../../../lib/types/search";
 
 interface ProducsNavbarProps {
   cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 export function ProductsNavbar(props: ProducsNavbarProps) {
-  const { cartItems } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
   const authMember = null;
   return (
     <div
@@ -82,7 +86,13 @@ export function ProductsNavbar(props: ProducsNavbarProps) {
               </NavLink>
             </Box>
             {/** BASKET */}
-            <Basket cartItems={cartItems} />
+            <Basket
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
 
             {!authMember ? (
               <Box>

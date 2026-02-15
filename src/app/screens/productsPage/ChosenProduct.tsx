@@ -47,12 +47,15 @@ const restaurantRetriever = createSelector(
 );
 
 interface ChosenProductProps {
-  onAdd: (item: CartItem) => void;
   cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
 export default function ChosenProduct(props: ChosenProductProps) {
-  const { onAdd, cartItems } = props;
+  const { onAdd, cartItems, onRemove, onDelete, onDeleteAll } = props;
 
   const authMember = null;
 
@@ -115,7 +118,13 @@ export default function ChosenProduct(props: ChosenProductProps) {
 
   return (
     <div style={{ background: "#ecf6f6" }}>
-      <ChosenProductNavbar cartItems={cartItems} />
+      <ChosenProductNavbar
+        cartItems={cartItems}
+        onAdd={onAdd}
+        onRemove={onRemove}
+        onDelete={onDelete}
+        onDeleteAll={onDeleteAll}
+      />
       <Container maxWidth="lg">
         <Stack
           direction="row"
@@ -397,10 +406,6 @@ export default function ChosenProduct(props: ChosenProductProps) {
                 transition: "all 0.3s ease",
               }}
               onClick={(e) => {
-                console.log(
-                  "CART BUTTON PRESSED!",
-                  chosenProduct.productImages[0],
-                );
                 onAdd({
                   _id: chosenProduct._id,
                   quantity: 1,

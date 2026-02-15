@@ -7,10 +7,14 @@ import { CartItem } from "../../../lib/types/search";
 
 interface UserNavbarProps {
   cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
 export function UserNavbar(props: UserNavbarProps) {
-  const { cartItems } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
 
   const authMember = null;
   return (
@@ -80,7 +84,13 @@ export function UserNavbar(props: UserNavbarProps) {
               </NavLink>
             </Box>
             {/** BASKET */}
-            <Basket cartItems={cartItems} />
+            <Basket
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
 
             {!authMember ? (
               <Box>

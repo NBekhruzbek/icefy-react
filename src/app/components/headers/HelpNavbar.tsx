@@ -7,10 +7,14 @@ import { CartItem } from "../../../lib/types/search";
 
 interface HelpProps {
   cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
 export function HelpNavbar(props: HelpProps) {
-  const { cartItems } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
 
   const authMember = null;
   return (
@@ -84,7 +88,13 @@ export function HelpNavbar(props: HelpProps) {
               </NavLink>
             </Box>
             {/** BASKET */}
-            <Basket cartItems={cartItems} />
+            <Basket
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
 
             {!authMember ? (
               <Box>

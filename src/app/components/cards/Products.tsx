@@ -304,7 +304,6 @@ export default function ProductCard({
               },
             }}
             onClick={(e) => {
-              console.log("CART BUTTON PRESSED!");
               onAdd({
                 _id: _id,
                 quantity: 1,

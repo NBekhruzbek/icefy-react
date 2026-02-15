@@ -18,50 +18,84 @@ import "../css/app.css";
 import "../css/navbar.css";
 import HelpPage from "./screens/helpPage";
 import { CartItem } from "../lib/types/search";
+import useBasket from "./hooks/useBasket";
 
 function App() {
   const location = useLocation();
 
-  const cartJson: string | null = localStorage.getItem("cardData");
-  const currentCart = cartJson ? JSON.parse(cartJson) : [];
-  const [cartItems, setCartItems] = useState<CartItem[]>(currentCart);
-
-  /** HANDLERS */
-
-  const onAdd = (input: CartItem) => {
-    const exist: any = cartItems.find(
-      (item: CartItem) => item._id === input._id,
-    );
-    if (exist) {
-      const cartUpdate = cartItems.map((item: CartItem) =>
-        item._id === input._id
-          ? { ...exist, quantity: exist.quantity + 1 }
-          : item,
-      );
-      setCartItems(cartUpdate);
-      localStorage.setItem("cartData", JSON.stringify(cartUpdate));
-    } else {
-      const cartUpdate = [...cartItems, { ...input }];
-      setCartItems(cartUpdate);
-      localStorage.setItem("cartData", JSON.stringify(cartUpdate));
-    }
-  };
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
 
   const getNavbar = () => {
     if (location.pathname === "/about") {
-      return <AboutUsNavbar cartItems={cartItems} />;
+      return (
+        <AboutUsNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      );
     } else if (location.pathname === "/products") {
-      return <ProductsNavbar cartItems={cartItems} />;
+      return (
+        <ProductsNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      );
     } else if (location.pathname === "/orders") {
-      return <OrdersNavbar cartItems={cartItems} />;
+      return (
+        <OrdersNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      );
     } else if (location.pathname === "/blog-page") {
-      return <BlogNavbar cartItems={cartItems} />;
+      return (
+        <BlogNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      );
     } else if (location.pathname === "/help-page") {
-      return <HelpNavbar cartItems={cartItems} />;
+      return (
+        <HelpNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      );
     } else if (location.pathname === "/user-page") {
-      return <UserNavbar cartItems={cartItems} />;
+      return (
+        <UserNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      );
     } else if (location.pathname === "/") {
-      return <HomeNavbar cartItems={cartItems} />;
+      return (
+        <HomeNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
+      );
     }
   };
 
@@ -72,7 +106,15 @@ function App() {
         <Route path="/about" element={<AboutUsPage />} />
         <Route
           path="/products/*"
-          element={<ProductsPage onAdd={onAdd} cartItems={cartItems} />}
+          element={
+            <ProductsPage
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
+          }
         />
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/blog-page" element={<BlogPage />} />
