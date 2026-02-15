@@ -100,7 +100,10 @@ export default function ProductCard({
       >
         <IconButton
           size="small"
-          onClick={likesHandler}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            likesHandler();
+          }}
           sx={{
             backgroundColor: "#f4eddd",
             padding: "6px",
@@ -145,7 +148,13 @@ export default function ProductCard({
           zIndex: 10,
         }}
       >
-        <Button className="view-btn" sx={{ right: "36px" }}>
+        <Button
+          className="view-btn"
+          sx={{ right: "36px" }}
+          onClick={(e: any) => {
+            e.stopPropagation();
+          }}
+        >
           <Badge badgeContent={views} color="secondary">
             <RemoveRedEyeIcon
               sx={{ color: (views ?? 0) > 0 ? "gray" : "white" }}

@@ -138,7 +138,7 @@ export default function Products() {
                     Price
                   </MenuItem>
                   <MenuItem
-                    value="views"
+                    value="likes"
                     onClick={() => searchOrderHandler("productLikes")}
                   >
                     Likes
