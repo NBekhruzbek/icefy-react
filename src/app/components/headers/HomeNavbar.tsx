@@ -79,41 +79,62 @@ export function HomeNavbar(props: HomeNavbarProps) {
             alignItems={"center"}
           >
             <Box className={"nav-txt hover-line"}>
-              <NavLink to="/" activeClassName={"underline"}>
+              <NavLink
+                to="/"
+                className={({ isActive }) => (isActive ? "underline" : "")}
+              >
                 Home
               </NavLink>
             </Box>
             <Box className={"nav-txt hover-line"}>
-              <NavLink to="/about" activeClassName={"underline"}>
+              <NavLink
+                to="/about"
+                className={({ isActive }) => (isActive ? "underline" : "")}
+              >
                 About Us
               </NavLink>
             </Box>
             <Box className={"nav-txt hover-line"}>
-              <NavLink to="/products" activeClassName={"underline"}>
+              <NavLink
+                to="/products"
+                className={({ isActive }) => (isActive ? "underline" : "")}
+              >
                 Products
               </NavLink>
             </Box>
             {authMember ? (
               <Box className={"nav-txt hover-line"}>
-                <NavLink to="/orders" activeClassName={"underline"}>
+                <NavLink
+                  to="/orders"
+                  className={({ isActive }) => (isActive ? "underline" : "")}
+                >
                   Orders
                 </NavLink>
               </Box>
             ) : null}
             <Box className={"nav-txt hover-line"}>
-              <NavLink to="/blog-page" activeClassName={"underline"}>
+              <NavLink
+                to="/blog-page"
+                className={({ isActive }) => (isActive ? "underline" : "")}
+              >
                 Blogs
               </NavLink>
             </Box>
             {authMember ? (
               <Box className={"nav-txt hover-line"}>
-                <NavLink to="/user-page" activeClassName={"underline"}>
+                <NavLink
+                  to="/user-page"
+                  className={({ isActive }) => (isActive ? "underline" : "")}
+                >
                   My Page
                 </NavLink>
               </Box>
             ) : null}
             <Box className={"nav-txt hover-line"}>
-              <NavLink to="/help-page" activeClassName={"underline"}>
+              <NavLink
+                to="/help-page"
+                className={({ isActive }) => (isActive ? "underline" : "")}
+              >
                 Help
               </NavLink>
             </Box>
