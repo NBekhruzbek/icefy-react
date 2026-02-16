@@ -4,9 +4,14 @@ import { createSelector } from "@reduxjs/toolkit";
 import moment from "moment";
 import { retrieveProcessOrders } from "./selector";
 import { useSelector } from "react-redux";
-import { Order, OrderItem } from "../../../lib/types/order";
+import { Order, OrderItem, OrderUpdateInput } from "../../../lib/types/order";
 import { Product } from "../../../lib/types/product";
-import { serverApi } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
+import { useGlobals } from "../../hooks/useGlobals";
+import { T } from "../../../lib/types/common";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { OrderStatus } from "../../../lib/enums/order.enum";
+import OrderService from "../../services/OrderService";
 
 /** REDUX SELECTOR */
 const processOrderRetriever = createSelector(
@@ -14,8 +19,39 @@ const processOrderRetriever = createSelector(
   (processOrders) => ({ processOrders }),
 );
 
-export default function ProcessOrders() {
+interface ProcessOrderProps {
+  setValue: (input: string) => void;
+}
+
+export default function ProcessOrders(props: ProcessOrderProps) {
+  const { setValue } = props;
+  const { authMember, setOrderBuilder } = useGlobals();
   const { processOrders } = useSelector(processOrderRetriever);
+
+  /** HANDLERS */
+
+  const finishOrderHandler = async (e: T) => {
+    try {
+      if (!authMember) throw new Error(Messages.error2);
+
+      const orderId = e.target.value;
+      const input: OrderUpdateInput = {
+        orderId: orderId,
+        orderStatus: OrderStatus.FINISH,
+      };
+
+      const confirmation = window.confirm("Have you received your order?");
+      if (confirmation) {
+        const order = new OrderService();
+        await order.updateOrder(input);
+        setValue("3");
+        setOrderBuilder(new Date());
+      }
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(err);
+    }
+  };
 
   return (
     <TabPanel value="2">
@@ -75,6 +111,7 @@ export default function ProcessOrders() {
                   {moment().format("YY-MM-DD HH:mm")}
                 </Box>
                 <Button
+                  value={order._id}
                   variant="contained"
                   color="primary"
                   sx={{
@@ -83,6 +120,7 @@ export default function ProcessOrders() {
                     borderRadius: "10px",
                   }}
                   className="cancel-button"
+                  onClick={finishOrderHandler}
                 >
                   Verify Order
                 </Button>

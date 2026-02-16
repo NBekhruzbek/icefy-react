@@ -16,13 +16,13 @@ import { HelpNavbar } from "./components/headers/HelpNavbar";
 import { UserNavbar } from "./components/headers/UserNavbar";
 import HelpPage from "./screens/helpPage";
 import useBasket from "./hooks/useBasket";
-import "../css/app.css";
-import "../css/navbar.css";
 import AuthenticationModal from "./components/auth";
 import { useGlobals } from "./hooks/useGlobals";
 import MemberService from "./services/MemberService";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
 import { Messages } from "../lib/config";
+import "../css/app.css";
+import "../css/navbar.css";
 
 function App() {
   const location = useLocation();

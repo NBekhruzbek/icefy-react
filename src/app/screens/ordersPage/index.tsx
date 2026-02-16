@@ -12,6 +12,7 @@ import { Order, OrderInquery } from "../../../lib/types/order";
 import "../../../css/orders.css";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrderService";
+import { useGlobals } from "../../hooks/useGlobals";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -23,6 +24,7 @@ const actionDispatch = (dispatch: Dispatch) => ({
 export function OrdersPage() {
   const { setPausedOrders, setProcessOrders, setFinishedOrders } =
     actionDispatch(useDispatch());
+  const { orderBuilder } = useGlobals();
   const [value, setValue] = useState("1");
   const [orderInquiry, setOrderInquiery] = useState<OrderInquery>({
     page: 1,
@@ -46,7 +48,7 @@ export function OrdersPage() {
       .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.FINISH })
       .then((data) => setFinishedOrders(data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [orderInquiry, orderBuilder]); // orderInquery qo'shish esdan chiqib qolganligi uchun qo'shdim, aslida avvalroq qo'shilishi kerek edi.
 
   /** HANDLERS */
 
@@ -74,8 +76,8 @@ export function OrdersPage() {
               </Box>
             </Box>
             <Stack className="order-main-content">
-              <PausedOrders />
-              <ProcessOrders />
+              <PausedOrders setValue={setValue} />
+              <ProcessOrders setValue={setValue} />
               <FinishedOrders />
             </Stack>
           </TabContext>
