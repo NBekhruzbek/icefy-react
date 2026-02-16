@@ -1,29 +1,45 @@
 import { TabPanel } from "@mui/lab";
 import { Box, Stack, Button } from "@mui/material";
+import { createSelector } from "@reduxjs/toolkit";
+import { retrievePausedOrders } from "./selector";
+import { useSelector } from "react-redux";
+import { Order, OrderItem } from "../../../lib/types/order";
+import { Product } from "../../../lib/types/product";
+import { serverApi } from "../../../lib/config";
+
+/** REDUX SLICE & SELECTOR */
+const pausedOrderRetriever = createSelector(
+  retrievePausedOrders,
+  (pausedOrders) => ({ pausedOrders }),
+);
 
 export default function PausedOrders() {
+  const { pausedOrders } = useSelector(pausedOrderRetriever);
+
   return (
     <TabPanel value="1">
       <Stack>
-        {[1, 2].map((ele, index) => {
+        {pausedOrders.map((order: Order) => {
           return (
-            <Box key={index} className={"order-main-box"}>
+            <Box key={order._id} className={"order-main-box"}>
               <Box className={"order-box-scroll"}>
-                {[1, 2, 3, 4, 5, 6].map((ele2, index2) => {
+                {order?.orderItems?.map((item: OrderItem) => {
+                  const product: Product = order.productData.filter(
+                    (ele: Product) => item.productId === ele._id,
+                  )[0];
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
                   return (
-                    <Box key={index2} className={"orders-name-price"}>
-                      <img
-                        src="/img/DairyFreeClassic.jpg"
-                        alt=""
-                        className="order-img"
-                      />
-                      <p className="product-title">Dairy Free Classic</p>
+                    <Box key={item._id} className={"orders-name-price"}>
+                      <img src={imagePath} alt="" className="order-img" />
+                      <p className="product-title">{product.productName}</p>
                       <Box className={"price-box"}>
-                        <p>$8</p>
+                        <p>${item.itemPrice}</p>
                         <img src="/icons/close.svg" alt="" />
-                        <p>2</p>
+                        <p>{item.itemQuantity}</p>
                         <img src="/icons/pause.svg" alt="" />
-                        <p style={{ marginLeft: "15px" }}>$16</p>
+                        <p style={{ marginLeft: "15px" }}>
+                          ${item.itemPrice * item.itemQuantity}
+                        </p>
                       </Box>
                     </Box>
                   );
@@ -33,16 +49,16 @@ export default function PausedOrders() {
               <Box className={"total-price-box"}>
                 <Box className={"box-total"}>
                   <p>Product price </p>
-                  <p> $18 </p>
+                  <p> ${order.orderTotal - order.orderDelivery} </p>
                   <img src="/icons/plus.svg" style={{ marginLeft: "20px" }} />
                   <p>Delivery cost</p>
-                  <p>$2</p>
+                  <p>${order.orderDelivery}</p>
                   <img
                     src={"/icons/pause.svg"}
                     style={{ marginLeft: "20px" }}
                   />
                   <p>Total</p>
-                  <p>$20</p>
+                  <p>${order.orderTotal}</p>
                 </Box>
                 <Button
                   variant="contained"
@@ -59,15 +75,19 @@ export default function PausedOrders() {
           );
         })}
 
-        {false && (
-          <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
-            <img
-              src="/icons/noimage-list.svg"
-              alt=""
-              style={{ width: 300, height: 300 }}
-            />
-          </Box>
-        )}
+        {!pausedOrders ||
+          (pausedOrders.length === 0 && (
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"center"}
+            >
+              <img
+                src="/icons/no-data.png"
+                style={{ width: 300, height: 300 }}
+              />
+            </Box>
+          ))}
       </Stack>
     </TabPanel>
   );
