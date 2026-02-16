@@ -9,10 +9,13 @@ import { useDispatch } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
 import { setFinishedOrders, setPausedOrders, setProcessOrders } from "./slice";
 import { Order, OrderInquery } from "../../../lib/types/order";
-import "../../../css/orders.css";
 import { OrderStatus } from "../../../lib/enums/order.enum";
 import OrderService from "../../services/OrderService";
 import { useGlobals } from "../../hooks/useGlobals";
+import { useNavigate } from "react-router-dom";
+import "../../../css/orders.css";
+import { serverApi } from "../../../lib/config";
+import { MemberType } from "../../../lib/enums/member.enum";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -24,7 +27,7 @@ const actionDispatch = (dispatch: Dispatch) => ({
 export function OrdersPage() {
   const { setPausedOrders, setProcessOrders, setFinishedOrders } =
     actionDispatch(useDispatch());
-  const { orderBuilder } = useGlobals();
+  const { orderBuilder, authMember } = useGlobals();
   const [value, setValue] = useState("1");
   const [orderInquiry, setOrderInquiery] = useState<OrderInquery>({
     page: 1,
@@ -55,6 +58,10 @@ export function OrdersPage() {
   const handleChange = (e: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const navigate = useNavigate();
+
+  if (!authMember) navigate("/");
 
   return (
     <div className={"orders-page"}>
@@ -87,16 +94,27 @@ export function OrdersPage() {
           <Box className="order-info-box">
             <Box className="member-box">
               <div className="order-user-img">
-                <img src={"/icons/user.png"} className="order-user-avatar" />
+                <img
+                  src={
+                    authMember?.memberImage
+                      ? `${serverApi}/${authMember.memberImage}`
+                      : "/icons/user.png"
+                  }
+                  className="order-user-avatar"
+                />
                 <div className="order-user-icon-box">
                   <img
-                    src={"/icons/user-badge.svg"}
+                    src={
+                      authMember?.memberType === MemberType.ADMIN
+                        ? "/icons/restaurant.svg"
+                        : "/icons/user-badge.svg"
+                    }
                     className="order-user-prof-img"
                   />
                 </div>
               </div>
-              <span className="order-user-name">Beck</span>
-              <span className="order-user-prof">User</span>
+              <span className="order-user-name">{authMember?.memberNick}</span>
+              <span className="order-user-prof">{authMember?.memberType}</span>
             </Box>
             <Box className="liner"></Box>
             <Box className="order-user-address">
@@ -104,7 +122,7 @@ export function OrdersPage() {
                 <LocationOnIcon />
               </div>
               <Box className="order-address-txt">
-                <p>Do not Exist!</p>
+                <p>{authMember?.memberAddress ?? "Do not Exist!"}</p>
               </Box>
             </Box>
           </Box>
