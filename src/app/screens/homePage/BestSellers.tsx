@@ -53,6 +53,7 @@ export default function BestSellers() {
                   price={product.productPrice}
                   views={product.productViews}
                   likes={product.productLikes}
+                  isLiked={product.isLiked}
                   rating={4.9}
                   width={280}
                 />

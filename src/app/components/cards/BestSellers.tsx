@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,6 +15,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ProductService from "../../services/ProductService";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { Messages } from "../../../lib/config";
+import { useGlobals } from "../../hooks/useGlobals";
 
 interface ProductCardProps {
   _id?: string;
@@ -24,6 +27,7 @@ interface ProductCardProps {
   price?: number;
   views?: number;
   likes?: number;
+  isLiked?: boolean;
   rating?: number;
   width?: number;
 }
@@ -36,13 +40,19 @@ export default function ProductCard({
   price,
   views,
   likes,
+  isLiked,
   rating,
   width,
 }: ProductCardProps) {
-  const authMember = null;
+  const { authMember } = useGlobals();
   const productService = new ProductService();
-  const [meFavorited, setMeFavorited] = useState(false);
+  const [meFavorited, setMeFavorited] = useState(isLiked);
   const [likess, setLikess] = useState<number>(likes ?? 0);
+
+  useEffect(() => {
+    setMeFavorited(!!authMember && !!isLiked);
+    setLikess(likes ?? 0);
+  }, [authMember, isLiked, likes]);
 
   const likesHandler = async () => {
     if (!authMember) {
@@ -54,11 +64,22 @@ export default function ProductCard({
       return;
     }
 
-    setLikess(likess + 1);
-    await productService.likeToggle(_id);
+    try {
+      const toggleLike = await productService.likeToggle(_id);
+      if (toggleLike?.action === "created") {
+        setLikess((prev) => prev + 1);
+      }
+      if (toggleLike?.action === "deleted") {
+        setLikess((prev) => Math.max(0, prev - 1));
+      }
 
-    setMeFavorited(!meFavorited);
+      setMeFavorited((prev) => !prev);
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(Messages.error1);
+    }
   };
+  if (!_id) return null;
 
   return (
     <Card
@@ -118,7 +139,7 @@ export default function ProductCard({
             <FavoriteBorderIcon sx={{ fontSize: "20px" }} />
           )}
         </IconButton>
-        {(likes ?? 0) > 0 ? (
+        {(likess ?? 0) > 0 ? (
           <Box
             sx={{
               width: 18,
@@ -133,7 +154,7 @@ export default function ProductCard({
               color: "#f83d8e",
             }}
           >
-            {likes}
+            {likess}
           </Box>
         ) : null}
       </Box>
