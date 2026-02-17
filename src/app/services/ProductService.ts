@@ -19,7 +19,7 @@ class ProductService {
 
       if (input.search) url += `&search=${input.search}`;
 
-      const result = await axios.get(url); // axios install: yarn add axios@^0.27.2 & yarn add @types/axios -D va tevada import qilinadi.
+      const result = await axios.get(url, { withCredentials: true }); // axios install: yarn add axios@^0.27.2 & yarn add @types/axios -D va tevada import qilinadi.
       console.log("getProducts:", result);
 
       return result.data;
@@ -29,11 +29,11 @@ class ProductService {
     }
   }
 
-  public async likeToggle(input: string): Promise<Product> {
+  public async likeToggle(input: string): Promise<any> {
     try {
       let url = `${this.path}/product/like/${input}`;
-      const result = await axios.post(url);
-
+      const result = await axios.post(url, {}, { withCredentials: true });
+      console.log("DATA", result.data);
       return result.data;
     } catch (err) {
       console.log("ERROR, likeToggle:", err);

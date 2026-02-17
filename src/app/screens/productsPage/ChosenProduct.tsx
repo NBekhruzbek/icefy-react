@@ -23,9 +23,10 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
-import { serverApi } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -82,7 +83,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
   const { restaurant } = useSelector(restaurantRetriever);
 
   const [selectedImage, setSelectedImage] = useState(0);
-  const [meFavorited, setMeFavorited] = useState(false);
+  const [meFavorited, setMeFavorited] = useState(chosenProduct?.isLiked);
   const [quantity, setQuantity] = useState(1);
 
   const [likess, setLikess] = useState<number>(
@@ -106,10 +107,17 @@ export default function ChosenProduct(props: ChosenProductProps) {
     }
   }, []);
 
+  useEffect(() => {
+    if (chosenProduct) {
+      setMeFavorited(authMember?._id && chosenProduct.isLiked ? true : false);
+      setLikess(chosenProduct.productLikes ?? 0);
+    }
+  }, [authMember, chosenProduct]);
+
   const productService = new ProductService();
 
   const likesHandler = async () => {
-    if (!authMember) {
+    if (!authMember?._id) {
       alert("Please LOGIN first!");
       return;
     }
@@ -118,12 +126,22 @@ export default function ChosenProduct(props: ChosenProductProps) {
       return;
     }
 
-    setLikess(likess + 1);
-    await productService.likeToggle(chosenProduct._id);
+    try {
+      const toggleLike = await productService.likeToggle(chosenProduct._id);
+      if (toggleLike?.action === "created") {
+        setLikess((prev) => prev + 1);
+      }
+      if (toggleLike?.action === "deleted") {
+        setLikess((prev) => Math.max(0, prev - 1));
+      }
 
-    setMeFavorited(!meFavorited);
+      setMeFavorited((prev) => !prev);
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(Messages.error1);
+    }
   };
-  if (!chosenProduct) return null;
+  if (!chosenProduct?._id) return null;
 
   const images = chosenProduct.productImages.map((ele) => {
     return `${serverApi}/${ele}`;
@@ -249,7 +267,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
                   <FavoriteBorderIcon sx={{ fontSize: "30px" }} />
                 )}
               </IconButton>
-              {(chosenProduct.productLikes ?? 0) > 0 ? (
+              {likess > 0 ? (
                 <Box
                   sx={{
                     width: 24,
@@ -265,7 +283,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
                     color: "#f83d8e",
                   }}
                 >
-                  {chosenProduct.productLikes}
+                  {likess}
                 </Box>
               ) : null}
             </Box>

@@ -19,6 +19,7 @@ export interface Product {
   productImages: string[];
   productLikes?: number;
   productViews: number;
+  isLiked: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
