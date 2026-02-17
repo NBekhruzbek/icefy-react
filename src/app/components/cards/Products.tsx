@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -17,7 +17,9 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ProductService from "../../services/ProductService";
 import { useNavigate } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
-import { serverApi } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
+import { sweetErrorHandling } from "../../../lib/sweetAlert";
+import { useGlobals } from "../../hooks/useGlobals";
 
 interface ProductCardProps {
   _id?: string;
@@ -27,6 +29,7 @@ interface ProductCardProps {
   price?: number;
   likes?: number;
   views?: number;
+  isLiked?: boolean;
   rating?: number;
   onAdd: (item: CartItem) => void;
 }
@@ -39,16 +42,22 @@ export default function ProductCard({
   price,
   likes,
   views,
+  isLiked,
   rating,
   onAdd,
 }: ProductCardProps) {
-  const authMember = null;
+  const { authMember } = useGlobals();
   const imagePath = `${serverApi}/${image}`;
 
   const productService = new ProductService();
-  const [meFavorited, setMeFavorited] = useState(false);
+  const [meFavorited, setMeFavorited] = useState(isLiked);
   const [likess, setLikess] = useState<number>(likes ?? 0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setMeFavorited(!!authMember && !!isLiked);
+    setLikess(likes ?? 0);
+  }, [authMember, isLiked, likes]);
 
   const likesHandler = async () => {
     if (!authMember) {
@@ -60,11 +69,22 @@ export default function ProductCard({
       return;
     }
 
-    setLikess(likess + 1);
-    await productService.likeToggle(_id);
+    try {
+      const toggleLike = await productService.likeToggle(_id);
+      if (toggleLike?.action === "created") {
+        setLikess((prev) => prev + 1);
+      }
+      if (toggleLike?.action === "deleted") {
+        setLikess((prev) => Math.max(0, prev - 1));
+      }
 
-    setMeFavorited(!meFavorited);
+      setMeFavorited((prev) => !prev);
+    } catch (err) {
+      console.log(err);
+      sweetErrorHandling(Messages.error1);
+    }
   };
+  if (!_id) return null;
 
   const chooseIceCreamHandler = (id: string) => {
     navigate(`/products/${id}`);
@@ -119,13 +139,13 @@ export default function ProductCard({
             },
           }}
         >
-          {!meFavorited ? (
+          {meFavorited ? (
             <FavoriteIcon sx={{ color: "#f83d8e", fontSize: "20px" }} />
           ) : (
             <FavoriteBorderIcon sx={{ fontSize: "20px" }} />
           )}
         </IconButton>
-        {(likes ?? 0) > 0 ? (
+        {(likess ?? 0) > 0 ? (
           <Box
             sx={{
               width: 18,
@@ -141,7 +161,7 @@ export default function ProductCard({
               color: "#f83d8e",
             }}
           >
-            {likes}
+            {likess}
           </Box>
         ) : null}
       </Box>

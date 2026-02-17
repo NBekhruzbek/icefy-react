@@ -340,6 +340,7 @@ export default function Products(props: ProductsProps) {
                           price={product.productPrice}
                           likes={product.productLikes}
                           views={product.productViews}
+                          isLiked={product.isLiked}
                           rating={4.9}
                           onAdd={onAdd}
                         />
