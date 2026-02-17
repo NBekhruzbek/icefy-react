@@ -22,8 +22,6 @@ const classicFavoritesRetriever = createSelector(
 export default function ClassicFavorites() {
   const { classicFavorites } = useSelector(classicFavoritesRetriever);
 
-  console.log("classicFavorites:", classicFavorites);
-
   return (
     <div className="fav">
       <Container>
@@ -52,6 +50,7 @@ export default function ClassicFavorites() {
                   price={ele.productPrice}
                   views={ele.productViews}
                   likes={ele.productLikes}
+                  isLiked={ele.isLiked}
                   rating={4.9}
                   width={280}
                 />
