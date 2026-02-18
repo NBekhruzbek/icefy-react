@@ -329,45 +329,63 @@ export default function Products(props: ProductsProps) {
                 </Box>
               </Stack>
               <Stack className="product-cards">
-                {products.length !== 0
-                  ? products.map((product: Product) => {
-                      return (
-                        <ProductCard
-                          _id={product._id}
-                          image={product.productImages[0]}
-                          title={product.productName}
-                          description="Rich chocolate ice cream with chunks of brownie."
-                          price={product.productPrice}
-                          likes={product.productLikes}
-                          views={product.productViews}
-                          isLiked={product.isLiked}
-                          rating={4.9}
-                          onAdd={onAdd}
-                        />
-                      );
-                    })
-                  : null}
-                <Stack className="pagination-section">
-                  <Pagination
-                    sx={{ mt: "35px", ml: "325px" }}
-                    count={
-                      products.length > 5
-                        ? productSearch.page + 1
-                        : productSearch.page
-                    }
-                    page={productSearch.page}
-                    renderItem={(item) => (
-                      <PaginationItem
-                        components={{
-                          previous: ArrowBackIcon,
-                          next: ArrowForwardIcon,
-                        }}
-                        {...item}
-                        color={"primary"}
+                {products.length !== 0 ? (
+                  products.map((product: Product) => {
+                    return (
+                      <ProductCard
+                        _id={product._id}
+                        image={product.productImages[0]}
+                        title={product.productName}
+                        description="Rich chocolate ice cream with chunks of brownie."
+                        price={product.productPrice}
+                        likes={product.productLikes}
+                        views={product.productViews}
+                        isLiked={product.isLiked}
+                        rating={4.9}
+                        onAdd={onAdd}
                       />
-                    )}
-                    onChange={paginationHandler}
-                  />
+                    );
+                  })
+                ) : (
+                  <Box
+                    sx={{
+                      width: "800px",
+                      height: "800px",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignContent: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <img
+                      src="/icons/no-data.png"
+                      style={{ width: 450, height: 450, marginTop: "120px" }}
+                    />
+                  </Box>
+                )}
+                <Stack className="pagination-section">
+                  {products.length !== 0 ? (
+                    <Pagination
+                      sx={{ mt: "35px", ml: "325px" }}
+                      count={
+                        products.length > 5
+                          ? productSearch.page + 1
+                          : productSearch.page
+                      }
+                      page={productSearch.page}
+                      renderItem={(item) => (
+                        <PaginationItem
+                          components={{
+                            previous: ArrowBackIcon,
+                            next: ArrowForwardIcon,
+                          }}
+                          {...item}
+                          color={"primary"}
+                        />
+                      )}
+                      onChange={paginationHandler}
+                    />
+                  ) : null}
                 </Stack>
               </Stack>
             </Stack>
