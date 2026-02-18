@@ -7,6 +7,7 @@ export interface AppRootState {
   homePage: HomePageState;
   productsPage: ProductsPageState;
   ordersPage: OrdersPageState;
+  userPage: UserPageState;
 }
 
 /** HOMEPAGE */
@@ -27,4 +28,9 @@ export interface OrdersPageState {
   pausedOrders: Order[];
   processOrders: Order[];
   finishedOrders: Order[];
+}
+
+/** USER PAGE */
+export interface UserPageState {
+  likedProducts: Product[];
 }

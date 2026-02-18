@@ -20,7 +20,6 @@ class ProductService {
       if (input.search) url += `&search=${input.search}`;
 
       const result = await axios.get(url, { withCredentials: true }); // axios install: yarn add axios@^0.27.2 & yarn add @types/axios -D va tevada import qilinadi.
-      console.log("getProducts:", result);
 
       return result.data;
     } catch (err) {
@@ -49,6 +48,19 @@ class ProductService {
       return result.data;
     } catch (err) {
       console.log("ERROR, getProduct:", err);
+      throw err;
+    }
+  }
+
+  public async getLikedProducts(input: any): Promise<Product[]> {
+    try {
+      let url = `${this.path}/product/likedProducts?page=${input.page}&limit=${input.limit}`;
+
+      const result = await axios.get(url, { withCredentials: true });
+
+      return result.data;
+    } catch (err) {
+      console.log("ERROR, getLikedProducts:", err);
       throw err;
     }
   }

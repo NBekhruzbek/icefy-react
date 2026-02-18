@@ -188,7 +188,7 @@ function App() {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/blog-page" element={<BlogPage />} />
         <Route path="/help-page" element={<HelpPage />} />
-        <Route path="/user-page" element={<UsersPage />} />
+        <Route path="/user-page" element={<UsersPage onAdd={onAdd} />} />
         <Route path="/" element={<HomePage onAdd={onAdd} />} />
       </Routes>
       <Footer />

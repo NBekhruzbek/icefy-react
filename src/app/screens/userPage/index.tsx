@@ -1,5 +1,13 @@
-import React from "react";
-import { Box, Container, Stack, Tab, Tabs } from "@mui/material";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import {
+  Box,
+  Container,
+  Pagination,
+  PaginationItem,
+  Stack,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TelegramIcon from "@mui/icons-material/Telegram";
@@ -11,19 +19,73 @@ import { useGlobals } from "../../hooks/useGlobals";
 import { serverApi } from "../../../lib/config";
 import { MemberType } from "../../../lib/enums/member.enum";
 import { TabContext, TabPanel } from "@mui/lab";
+import { CartItem } from "../../../lib/types/search";
+import LikedProducts from "../../components/cards/LikedProducts";
+import { createSelector, Dispatch } from "@reduxjs/toolkit";
+import { setLikedProducts } from "./slice";
+import { Product } from "../../../lib/types/product";
+import ProductService from "../../services/ProductService";
+import { retrieveLikedProducts } from "./selector";
+import { useDispatch, useSelector } from "react-redux";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-export function UsersPage() {
+/** REDUX SELECTOR */
+const actionDispatch = (dispatch: Dispatch) => ({
+  setLikedProducts: (data: Product[]) => dispatch(setLikedProducts(data)),
+});
+
+const productsRetriever = createSelector(retrieveLikedProducts, (products) => ({
+  products,
+}));
+
+interface UsersPageProps {
+  onAdd: (item: CartItem) => void;
+}
+export function UsersPage(props: UsersPageProps) {
+  const { onAdd } = props;
+
   const navigate = useNavigate();
   const { authMember } = useGlobals();
 
+  const { setLikedProducts } = actionDispatch(useDispatch());
+  const { products } = useSelector(productsRetriever);
+
+  const [productSearch, setProductSearch] = useState<any>({
+    page: 1,
+    limit: 6,
+  });
   const [value, setValue] = React.useState("1");
 
-  /** HANDLERS **/
-  const handleChange = (e: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+  if (!authMember) navigate("/");
+
+  const fetchLikedProducts = async () => {
+    try {
+      const productService = new ProductService();
+      const data = await productService.getLikedProducts(productSearch);
+      setLikedProducts(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  if (!authMember) navigate("/");
+  useEffect(() => {
+    // Backenddan data fetch qilish
+    fetchLikedProducts();
+  }, [productSearch]);
+
+  /** HANDLERS */
+  const handleChange = (e: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+    fetchLikedProducts();
+  };
+
+  const paginationHandler = (e: ChangeEvent<any>, value: number) => {
+    setProductSearch((prev: any) => ({
+      ...prev,
+      page: value,
+    }));
+  };
 
   return (
     <div className={"user-page"}>
@@ -82,7 +144,98 @@ export function UsersPage() {
                   <TabPanel value={"1"}>
                     <Settings />
                   </TabPanel>
-                  <TabPanel value={"2"}>{/* <LikedProducts /> */}</TabPanel>
+                  <TabPanel value={"2"}>
+                    <Stack sx={{ ml: "50px", mr: "50px" }}>
+                      {/* PRODUCTS */}
+                      <Stack
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "start",
+                          gap: "20px",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        {products.length !== 0 ? (
+                          products.map((product: Product) => {
+                            return (
+                              <LikedProducts
+                                _id={product._id}
+                                image={product.productImages[0]}
+                                title={product.productName}
+                                description="Rich chocolate ice cream with chunks of brownie."
+                                price={product.productPrice}
+                                likes={product.productLikes}
+                                views={product.productViews}
+                                isLiked={product.isLiked}
+                                rating={4.9}
+                                onAdd={onAdd}
+                                onRefresh={fetchLikedProducts}
+                              />
+                            );
+                          })
+                        ) : (
+                          <Box
+                            sx={{
+                              width: "800px",
+                              height: "800px",
+                              display: "flex",
+                              flexDirection: "row",
+                              alignContent: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <img
+                              src="/icons/no-data.png"
+                              style={{
+                                width: 450,
+                                height: 450,
+                                marginTop: "120px",
+                              }}
+                            />
+                          </Box>
+                        )}
+                      </Stack>
+                      <Stack>
+                        <Pagination
+                          sx={{ mt: "35px", ml: "325px" }}
+                          count={
+                            products.length > 3
+                              ? productSearch.page + 1
+                              : productSearch.page
+                          }
+                          page={productSearch.page}
+                          renderItem={(item) => (
+                            <PaginationItem
+                              components={{
+                                previous: ArrowBackIcon,
+                                next: ArrowForwardIcon,
+                              }}
+                              {...item}
+                              color={"primary"}
+                            />
+                          )}
+                          onChange={paginationHandler}
+                        />
+                      </Stack>
+                    </Stack>
+                    <Stack
+                      sx={{
+                        ml: "50px",
+                        mr: "50px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        gap: "20px",
+                      }}
+                    >
+                      <Stack className="pagination-section"></Stack>
+                    </Stack>
+                    <LikedProducts
+                      onAdd={onAdd}
+                      onRefresh={fetchLikedProducts}
+                    />
+                  </TabPanel>
                 </Stack>
               </Stack>
             </TabContext>
