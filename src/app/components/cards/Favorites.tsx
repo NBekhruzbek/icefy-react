@@ -18,8 +18,9 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ProductService from "../../services/ProductService";
 import { useGlobals } from "../../hooks/useGlobals";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
-import { Messages } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
 import { useDispatch } from "react-redux";
+import { CartItem } from "../../../lib/types/search";
 
 interface ProductCardProps {
   _id?: string;
@@ -32,6 +33,7 @@ interface ProductCardProps {
   views?: number;
   likes?: number;
   isLiked?: boolean;
+  onAdd: (item: CartItem) => void;
 }
 
 export default function ProductCard({
@@ -45,12 +47,15 @@ export default function ProductCard({
   views,
   likes,
   isLiked,
+  onAdd,
 }: ProductCardProps) {
   const { authMember } = useGlobals();
 
   const productService = new ProductService();
   const [meFavorited, setMeFavorited] = useState(isLiked);
   const [likess, setLikess] = useState<number>(likes ?? 0);
+
+  const imagePath = `${serverApi}/${image}`;
 
   const dispatch = useDispatch();
 
@@ -181,7 +186,7 @@ export default function ProductCard({
       >
         {/* Product Image */}
         <img
-          src={image}
+          src={imagePath}
           alt={title}
           style={{
             maxWidth: "85%",
@@ -268,6 +273,16 @@ export default function ProductCard({
               "&:hover": {
                 backgroundColor: "#5a3ba0",
               },
+            }}
+            onClick={(e) => {
+              onAdd({
+                _id: _id,
+                quantity: 1,
+                name: title,
+                price: price,
+                image: image,
+              });
+              e.stopPropagation();
             }}
           >
             <ShoppingCartIcon fontSize="small" />

@@ -16,8 +16,9 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ProductService from "../../services/ProductService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
-import { Messages } from "../../../lib/config";
+import { Messages, serverApi } from "../../../lib/config";
 import { useGlobals } from "../../hooks/useGlobals";
+import { CartItem } from "../../../lib/types/search";
 
 interface ProductCardProps {
   _id?: string;
@@ -30,6 +31,7 @@ interface ProductCardProps {
   isLiked?: boolean;
   rating?: number;
   width?: number;
+  onAdd: (item: CartItem) => void;
 }
 
 export default function ProductCard({
@@ -43,11 +45,14 @@ export default function ProductCard({
   isLiked,
   rating,
   width,
+  onAdd,
 }: ProductCardProps) {
   const { authMember } = useGlobals();
   const productService = new ProductService();
   const [meFavorited, setMeFavorited] = useState(isLiked);
   const [likess, setLikess] = useState<number>(likes ?? 0);
+
+  const imagePath = `${serverApi}/${image}`;
 
   useEffect(() => {
     setMeFavorited(!!authMember && !!isLiked);
@@ -176,7 +181,7 @@ export default function ProductCard({
       >
         {/* Product Image */}
         <img
-          src={image}
+          src={imagePath}
           alt={title}
           style={{
             maxWidth: "85%",
@@ -263,6 +268,16 @@ export default function ProductCard({
               "&:hover": {
                 backgroundColor: "#5a3ba0",
               },
+            }}
+            onClick={(e) => {
+              onAdd({
+                _id: _id,
+                quantity: 1,
+                name: title,
+                price: price,
+                image: image,
+              });
+              e.stopPropagation();
             }}
           >
             <ShoppingCartIcon fontSize="small" />

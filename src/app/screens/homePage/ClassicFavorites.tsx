@@ -10,6 +10,7 @@ import "../../../css/classicFavorites.css";
 import { useSelector } from "react-redux";
 import { Product } from "../../../lib/types/product";
 import { serverApi } from "../../../lib/config";
+import { CartItem } from "../../../lib/types/search";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 
@@ -19,7 +20,12 @@ const classicFavoritesRetriever = createSelector(
   (classicFavorites) => ({ classicFavorites }),
 );
 
-export default function ClassicFavorites() {
+interface ClassicFavoritesProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function ClassicFavorites(props: ClassicFavoritesProps) {
+  const { onAdd } = props;
   const { classicFavorites } = useSelector(classicFavoritesRetriever);
 
   return (
@@ -40,11 +46,10 @@ export default function ClassicFavorites() {
           </Stack>
           <Stack className="cards">
             {classicFavorites.map((ele: Product) => {
-              const imagePath = `${serverApi}/${ele.productImages[0]}`;
               return (
                 <ProductCard
                   _id={ele._id}
-                  image={imagePath}
+                  image={ele.productImages[0]}
                   title={ele.productName}
                   description={ele.productDesc}
                   price={ele.productPrice}
@@ -53,6 +58,7 @@ export default function ClassicFavorites() {
                   isLiked={ele.isLiked}
                   rating={4.9}
                   width={280}
+                  onAdd={onAdd}
                 />
               );
             })}

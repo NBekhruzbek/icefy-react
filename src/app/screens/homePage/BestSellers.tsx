@@ -10,6 +10,7 @@ import { retrieveBestSellers } from "./selector";
 import { Product } from "../../../lib/types/product";
 import { serverApi } from "../../../lib/config";
 import "../../../css/bestSellers.css";
+import { CartItem } from "../../../lib/types/search";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);
 
@@ -21,7 +22,12 @@ const bestSellersRetriever = createSelector(
   }),
 );
 
-export default function BestSellers() {
+interface BestSellersProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function BestSellers(props: BestSellersProps) {
+  const { onAdd } = props;
   const { bestSellers } = useSelector(bestSellersRetriever);
 
   return (
@@ -43,11 +49,10 @@ export default function BestSellers() {
           </Stack>
           <Stack className="cards">
             {bestSellers.map((product: Product) => {
-              const imagePath = `${serverApi}/${product.productImages[0]}`;
               return (
                 <ProductCard
                   _id={product._id}
-                  image={imagePath}
+                  image={product.productImages[0]}
                   title={product.productName}
                   description={product.productDesc}
                   price={product.productPrice}
@@ -56,6 +61,7 @@ export default function BestSellers() {
                   isLiked={product.isLiked}
                   rating={4.9}
                   width={280}
+                  onAdd={onAdd}
                 />
               );
             })}

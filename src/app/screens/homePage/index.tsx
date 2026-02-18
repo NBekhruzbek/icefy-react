@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import ProductService from "../../services/ProductService";
 import { Member } from "../../../lib/types/member";
 import MemberService from "../../services/MemberService";
+import { CartItem } from "../../../lib/types/search";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -22,7 +23,12 @@ const actionDispatch = (dispatch: Dispatch) => ({
   setTopMembers: (data: Member[]) => dispatch(setTopMembers(data)),
 });
 
-export function HomePage() {
+interface HomePageProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export function HomePage(props: HomePageProps) {
+  const { onAdd } = props;
   const { setClassicFavorites, setBestSellers, setTopMembers } =
     actionDispatch(useDispatch());
 
@@ -70,9 +76,9 @@ export function HomePage() {
   return (
     <div className="home-page">
       <Intro />
-      <ClassicFavorites />
+      <ClassicFavorites onAdd={onAdd} />
       <SpecialDiscount />
-      <BestSellers />
+      <BestSellers onAdd={onAdd} />
       <TopMembers />
       <Comments />
       <Instagram />
