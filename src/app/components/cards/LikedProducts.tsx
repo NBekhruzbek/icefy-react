@@ -215,7 +215,9 @@ export default function LikedProductCard({
             maxHeight: "100%",
             borderRadius: "20px",
             objectFit: "contain",
-            transition: "transform 0.3s ease",
+            filter:
+              "drop-shadow(0 8px 10px rgba(15, 2, 0, 0.28)) drop-shadow(0 2px 4px rgba(15, 2, 0, 0.12))",
+            transition: "transform 0.3s ease, filter 0.3s ease",
           }}
         />
       </Box>

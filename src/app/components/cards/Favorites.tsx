@@ -189,6 +189,8 @@ export default function ProductCard({
             maxHeight: "85%",
             objectFit: "contain",
             borderRadius: "24px",
+            filter:
+              "drop-shadow(0 8px 14px rgba(15, 2, 0, 0.28)) drop-shadow(0 3px 5px rgba(15, 2, 0, 0.12))",
           }}
         />
       </Box>
