@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { Container, Stack, Box, Button, Typography } from "@mui/material";
+import React from "react";
+import { Container, Stack, Box, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import "../../../css/intro.css";
 
 export default function Intro() {
-  const [count, setCount] = useState(0);
   return (
     <div style={{ position: "relative", overflow: "hidden" }}>
       <Container>

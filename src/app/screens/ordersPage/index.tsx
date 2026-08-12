@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent, useEffect } from "react";
+import { useState, SyntheticEvent, useEffect, useMemo } from "react";
 import { Container, Stack, Box, Tabs, Tab } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import PausedOrders from "./PausedOrders";
@@ -25,11 +25,14 @@ const actionDispatch = (dispatch: Dispatch) => ({
 });
 
 export function OrdersPage() {
-  const { setPausedOrders, setProcessOrders, setFinishedOrders } =
-    actionDispatch(useDispatch());
+  const dispatch = useDispatch();
+  const { setPausedOrders, setProcessOrders, setFinishedOrders } = useMemo(
+    () => actionDispatch(dispatch),
+    [dispatch],
+  );
   const { orderBuilder, authMember } = useGlobals();
   const [value, setValue] = useState("1");
-  const [orderInquiry, setOrderInquiery] = useState<OrderInquery>({
+  const [orderInquiry] = useState<OrderInquery>({
     page: 1,
     limit: 5,
     orderStatus: OrderStatus.PAUSE,
@@ -51,7 +54,13 @@ export function OrdersPage() {
       .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.FINISH })
       .then((data) => setFinishedOrders(data))
       .catch((err) => console.log(err));
-  }, [orderInquiry, orderBuilder]); // orderInquery qo'shish esdan chiqib qolganligi uchun qo'shdim, aslida avvalroq qo'shilishi kerek edi.
+  }, [
+    orderInquiry,
+    orderBuilder,
+    setPausedOrders,
+    setProcessOrders,
+    setFinishedOrders,
+  ]);
 
   /** HANDLERS */
 
@@ -95,6 +104,7 @@ export function OrdersPage() {
             <Box className="member-box">
               <div className="order-user-img">
                 <img
+                  alt="User avatar"
                   src={
                     authMember?.memberImage
                       ? `${serverApi}/${authMember.memberImage}`
@@ -104,6 +114,7 @@ export function OrdersPage() {
                 />
                 <div className="order-user-icon-box">
                   <img
+                    alt=""
                     src={
                       authMember?.memberType === MemberType.ADMIN
                         ? "/icons/restaurant.svg"

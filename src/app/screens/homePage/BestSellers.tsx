@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 import { createSelector } from "@reduxjs/toolkit";
 import { retrieveBestSellers } from "./selector";
 import { Product } from "../../../lib/types/product";
-import { serverApi } from "../../../lib/config";
 import "../../../css/bestSellers.css";
 import { CartItem } from "../../../lib/types/search";
 

@@ -19,8 +19,6 @@ const Footers = styled.div`
 `;
 
 export default function Footer() {
-  const authMember = null;
-
   return (
     <Footers>
       <Container sx={{ maxWidth: "100%" }}>
@@ -28,6 +26,7 @@ export default function Footer() {
           <Stack className="footer-logo">
             <Box>
               <img
+                alt=""
                 style={{ width: "160px", height: "160px " }}
                 src="/icons/logo.svg"
               />

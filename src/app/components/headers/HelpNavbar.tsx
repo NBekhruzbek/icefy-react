@@ -100,6 +100,7 @@ export function HelpNavbar(props: HelpProps) {
               <Typography>
                 <NavLink to="/" className={"icefy-logo"}>
                   <img
+                    alt=""
                     style={{ width: "120px", height: "120px " }}
                     src="/icons/logo.svg"
                   />
@@ -194,6 +195,7 @@ export function HelpNavbar(props: HelpProps) {
                 </Box>
               ) : (
                 <img
+                  alt="User avatar"
                   style={{
                     width: "55px",
                     height: "55px",
@@ -205,7 +207,6 @@ export function HelpNavbar(props: HelpProps) {
                       ? `${serverApi}/${authMember.memberImage}`
                       : "/icons/user.png"
                   }
-                  aria-haspopup={"true"}
                   onClick={handleLogoutClick}
                 />
               )}

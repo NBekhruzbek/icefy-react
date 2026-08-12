@@ -99,6 +99,7 @@ export function BlogNavbar(props: BlogNavbarProps) {
               <Typography>
                 <NavLink to="/" className={"icefy-logo"}>
                   <img
+                    alt=""
                     style={{ width: "120px", height: "120px " }}
                     src="/icons/logo.svg"
                   />
@@ -193,6 +194,7 @@ export function BlogNavbar(props: BlogNavbarProps) {
                 </Box>
               ) : (
                 <img
+                  alt="User avatar"
                   style={{
                     width: "55px",
                     height: "55px",
@@ -204,7 +206,6 @@ export function BlogNavbar(props: BlogNavbarProps) {
                       ? `${serverApi}/${authMember.memberImage}`
                       : "/icons/user.png"
                   }
-                  aria-haspopup={"true"}
                   onClick={handleLogoutClick}
                 />
               )}

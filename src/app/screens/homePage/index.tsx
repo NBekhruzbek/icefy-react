@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Intro from "./Intro";
 import ClassicFavorites from "./ClassicFavorites";
 import SpecialDiscount from "./SpecialDiscount";
@@ -29,8 +29,11 @@ interface HomePageProps {
 
 export function HomePage(props: HomePageProps) {
   const { onAdd } = props;
-  const { setClassicFavorites, setBestSellers, setTopMembers } =
-    actionDispatch(useDispatch());
+  const dispatch = useDispatch();
+  const { setClassicFavorites, setBestSellers, setTopMembers } = useMemo(
+    () => actionDispatch(dispatch),
+    [dispatch],
+  );
 
   useEffect(() => {
     // Backend serverdan data fetch => Data
@@ -71,7 +74,7 @@ export function HomePage(props: HomePageProps) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [setClassicFavorites, setBestSellers, setTopMembers]);
 
   return (
     <div className="home-page">

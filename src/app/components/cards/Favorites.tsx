@@ -10,7 +10,6 @@ import {
   Button,
   Badge,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -19,7 +18,6 @@ import ProductService from "../../services/ProductService";
 import { useGlobals } from "../../hooks/useGlobals";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { Messages, serverApi } from "../../../lib/config";
-import { useDispatch } from "react-redux";
 import { CartItem } from "../../../lib/types/search";
 
 interface ProductCardProps {
@@ -56,8 +54,6 @@ export default function ProductCard({
   const [likess, setLikess] = useState<number>(likes ?? 0);
 
   const imagePath = `${serverApi}/${image}`;
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setMeFavorited(!!authMember && !!isLiked);

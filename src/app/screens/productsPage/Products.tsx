@@ -28,8 +28,7 @@ import {
   ProductCategory,
   ProductFlavor,
 } from "../../../lib/enums/product.enum";
-import { ChangeEvent, useEffect, useState } from "react";
-import { serverApi } from "../../../lib/config";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { CartItem } from "../../../lib/types/search";
 
 /** REDUX SLICE & SELECTOR */
@@ -48,7 +47,8 @@ interface ProductsProps {
 export default function Products(props: ProductsProps) {
   const { onAdd } = props;
 
-  const { setProducts } = actionDispatch(useDispatch());
+  const dispatch = useDispatch();
+  const { setProducts } = useMemo(() => actionDispatch(dispatch), [dispatch]);
   const { products } = useSelector(productsRetriever);
   const [productSearch, setProductSearch] = useState<ProductInquery>({
     page: 1,
@@ -66,12 +66,11 @@ export default function Products(props: ProductsProps) {
       .getProducts(productSearch)
       .then((data) => setProducts(data))
       .catch((err) => console.log(err));
-  }, [productSearch]);
+  }, [productSearch, setProducts]);
 
   useEffect(() => {
     if (searchText === "") {
-      productSearch.search = "";
-      setProductSearch({ ...productSearch });
+      setProductSearch((prev) => ({ ...prev, search: "" }));
     }
   }, [searchText]);
 
@@ -119,7 +118,7 @@ export default function Products(props: ProductsProps) {
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key == "Enter") searchProductHandler();
+                    if (e.key === "Enter") searchProductHandler();
                   }}
                 />
                 <Button
@@ -358,6 +357,7 @@ export default function Products(props: ProductsProps) {
                     }}
                   >
                     <img
+                      alt="No products found"
                       src="/icons/no-data.png"
                       style={{ width: 450, height: 450, marginTop: "120px" }}
                     />

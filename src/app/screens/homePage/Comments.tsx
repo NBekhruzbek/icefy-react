@@ -8,7 +8,7 @@ import {
   Rating,
 } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, Navigation } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";

@@ -8,7 +8,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { ChosenProductNavbar } from "../../components/headers/ChosenProduct";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -78,7 +78,11 @@ export default function ChosenProduct(props: ChosenProductProps) {
   const { authMember } = useGlobals();
 
   const { productId } = useParams<{ productId: string }>();
-  const { setRestaurant, setChosenProduct } = actionDispatch(useDispatch());
+  const dispatch = useDispatch();
+  const { setRestaurant, setChosenProduct } = useMemo(
+    () => actionDispatch(dispatch),
+    [dispatch],
+  );
   const { chosenProduct } = useSelector(chosenProductRetriever);
   const { restaurant } = useSelector(restaurantRetriever);
 
@@ -105,7 +109,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
         .then((data) => setRestaurant(data))
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [productId, setChosenProduct, setRestaurant]);
 
   useEffect(() => {
     if (chosenProduct) {

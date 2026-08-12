@@ -93,7 +93,7 @@ export function Settings() {
     <Box className={"settings"}>
       <Box className={"member-media-frame"}>
         <Button component="label" onChange={handleImageViewer}>
-          <img src={memberImage} className={"mb-image"} />
+          <img src={memberImage} className={"mb-image"} alt="Your profile" />
           <input type="file" hidden />
         </Button>
 

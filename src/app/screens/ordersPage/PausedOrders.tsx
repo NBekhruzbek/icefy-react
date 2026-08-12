@@ -108,10 +108,11 @@ export default function PausedOrders(props: PausedOrdersProps) {
                 <Box className={"box-total"}>
                   <p>Product price </p>
                   <p> ${order.orderTotal - order.orderDelivery} </p>
-                  <img src="/icons/plus.svg" style={{ marginLeft: "20px" }} />
+                  <img src="/icons/plus.svg" style={{ marginLeft: "20px" }} alt="" />
                   <p>Delivery cost</p>
                   <p>${order.orderDelivery}</p>
                   <img
+                    alt=""
                     src={"/icons/pause.svg"}
                     style={{ marginLeft: "20px" }}
                   />
@@ -148,6 +149,7 @@ export default function PausedOrders(props: PausedOrdersProps) {
               justifyContent={"center"}
             >
               <img
+                alt="No orders yet"
                 src="/icons/no-data.png"
                 style={{ width: 300, height: 300 }}
               />

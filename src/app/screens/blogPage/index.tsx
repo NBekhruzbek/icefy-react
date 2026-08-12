@@ -9,7 +9,6 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Button, Container } from "@mui/material";
 
 interface ExpandMoreProps extends IconButtonProps {

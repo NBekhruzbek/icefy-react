@@ -1,7 +1,7 @@
 // import React from "react";
 import { Box, Container, Stack } from "@mui/material";
 import Card from "@mui/joy/Card";
-import { CssVarsProvider, Typography } from "@mui/joy";
+import { CssVarsProvider } from "@mui/joy";
 import CardOverflow from "@mui/joy/CardOverflow";
 import AspectRatio from "@mui/joy/AspectRatio";
 import "../../../css/topMembers.css";

@@ -9,7 +9,6 @@ import { retrieveClassicFavorites } from "./selector";
 import "../../../css/classicFavorites.css";
 import { useSelector } from "react-redux";
 import { Product } from "../../../lib/types/product";
-import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
 
 SwiperCore.use([Autoplay, Navigation, Pagination]);

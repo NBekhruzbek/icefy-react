@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Box,
   Container,
@@ -48,7 +54,11 @@ export function UsersPage(props: UsersPageProps) {
   const navigate = useNavigate();
   const { authMember } = useGlobals();
 
-  const { setLikedProducts } = actionDispatch(useDispatch());
+  const dispatch = useDispatch();
+  const { setLikedProducts } = useMemo(
+    () => actionDispatch(dispatch),
+    [dispatch],
+  );
   const { products } = useSelector(productsRetriever);
 
   const [productSearch, setProductSearch] = useState<any>({
@@ -59,7 +69,7 @@ export function UsersPage(props: UsersPageProps) {
 
   if (!authMember) navigate("/");
 
-  const fetchLikedProducts = async () => {
+  const fetchLikedProducts = useCallback(async () => {
     try {
       const productService = new ProductService();
       const data = await productService.getLikedProducts(productSearch);
@@ -67,12 +77,12 @@ export function UsersPage(props: UsersPageProps) {
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [productSearch, setLikedProducts]);
 
   useEffect(() => {
     // Backenddan data fetch qilish
     fetchLikedProducts();
-  }, [productSearch]);
+  }, [fetchLikedProducts]);
 
   /** HANDLERS */
   const handleChange = (e: React.SyntheticEvent, newValue: string) => {
@@ -186,6 +196,7 @@ export function UsersPage(props: UsersPageProps) {
                             }}
                           >
                             <img
+                              alt="No liked products"
                               src="/icons/no-data.png"
                               style={{
                                 width: 450,
@@ -246,6 +257,7 @@ export function UsersPage(props: UsersPageProps) {
               >
                 <div className={"order-user-img"}>
                   <img
+                    alt="User avatar"
                     src={
                       authMember?.memberImage
                         ? `${serverApi}/${authMember.memberImage}`
@@ -255,6 +267,7 @@ export function UsersPage(props: UsersPageProps) {
                   />
                   <div className={"order-user-icon-box"}>
                     <img
+                      alt=""
                       src={
                         authMember?.memberType === MemberType.ADMIN
                           ? "/icons/restaurant.svg"

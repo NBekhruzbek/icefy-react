@@ -102,6 +102,7 @@ export function HomeNavbar(props: HomeNavbarProps) {
               <Typography>
                 <NavLink to="/" className={"icefy-logo"}>
                   <img
+                    alt=""
                     style={{ width: "125px", height: "125px " }}
                     src="/icons/logo.svg"
                   />
@@ -224,6 +225,7 @@ export function HomeNavbar(props: HomeNavbarProps) {
                 </Box>
               ) : (
                 <img
+                  alt="User avatar"
                   style={{
                     width: "55px",
                     height: "55px",
@@ -235,7 +237,6 @@ export function HomeNavbar(props: HomeNavbarProps) {
                       ? `${serverApi}/${authMember.memberImage}`
                       : "/icons/user.png"
                   }
-                  aria-haspopup={"true"}
                   onClick={handleLogoutClick}
                 />
               )}
@@ -325,7 +326,7 @@ export function HomeNavbar(props: HomeNavbarProps) {
                 </Button>
               </Box>
             ) : (
-              <img />
+              null
             )}
           </Stack>
         </Stack>
