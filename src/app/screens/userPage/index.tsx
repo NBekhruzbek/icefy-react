@@ -231,10 +231,6 @@ export function UsersPage(props: UsersPageProps) {
                     >
                       <Stack className="pagination-section"></Stack>
                     </Stack>
-                    <LikedProducts
-                      onAdd={onAdd}
-                      onRefresh={fetchLikedProducts}
-                    />
                   </TabPanel>
                 </Stack>
               </Stack>

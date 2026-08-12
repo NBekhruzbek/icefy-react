@@ -23,9 +23,9 @@ import { CartItem } from "../../../lib/types/search";
 interface ProductCardProps {
   _id?: string;
   image?: string;
-  title?: string;
+  title: string;
   description?: string;
-  price?: number;
+  price: number;
   views?: number;
   likes?: number;
   isLiked?: boolean;

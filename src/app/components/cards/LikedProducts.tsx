@@ -24,9 +24,9 @@ import { useGlobals } from "../../hooks/useGlobals";
 interface LikedProductCardProps {
   _id?: string;
   image?: string;
-  title?: string;
+  title: string;
   description?: string;
-  price?: number;
+  price: number;
   likes?: number;
   views?: number;
   isLiked?: boolean;
