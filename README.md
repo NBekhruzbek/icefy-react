@@ -718,9 +718,74 @@ The app opens at **http://localhost:3000** with hot reload.
 
 ## 16. Deployment
 
-The production build is a set of static files served by `serve` and supervised by **PM2**.
+Icefy ships as a **static bundle**. `yarn build` compiles React into hashed files under `build/`,
+[`serve`](https://www.npmjs.com/package/serve) hands those files out over HTTP on port `4100`, and
+**PM2** keeps that process alive and brings it back after a reboot. The app has no Node server of
+its own — every dynamic piece comes from the backend API, which the browser calls **directly**.
 
-### One-command deploy — [`deploy.sh`](deploy.sh)
+### 16.1 Production topology
+
+```
+                     ┌───────────────────────────────────────────┐
+   Browser ──:443──▶ │  Nginx — TLS termination, custom domain   │
+                     │  proxy_pass → http://127.0.0.1:4100       │
+                     └────────────────────┬──────────────────────┘
+                                          │
+                     ┌────────────────────▼──────────────────────┐
+                     │  PM2 › ICEFY-REACT                        │
+                     │  serve -s build -l 4100   (static SPA)    │
+                     └───────────────────────────────────────────┘
+
+   Browser ─── REST over axios (withCredentials) ──────▶  Backend API :4003
+   Browser ─── WebSocket via Socket.IO           ──────▶  Backend API :4003
+```
+
+The important consequence: **Nginx only serves the SPA shell**. REST and Socket.IO traffic leaves
+the browser for the backend origin directly, so the backend — not this repo — owns CORS, cookies
+and TLS for the API.
+
+### 16.2 Server prerequisites
+
+| Requirement | Notes |
+| :--- | :--- |
+| Node.js 20.x | Same major as development (verified on 20.19.5) |
+| Yarn 1.x | Installed globally by `deploy.sh`; npm works too |
+| PM2 | Process supervisor — install once, globally |
+| `serve` | Static file server with SPA fallback — installed globally by `deploy.sh` |
+| Git | `deploy.sh` pulls the release from `origin/main` |
+| Port `4100` | Local only; expose `80`/`443` through Nginx instead |
+| Reachable backend | The API host must accept requests from the deployed origin |
+| ~1 GB free RAM | CRA's production build is memory-hungry on small VPS instances |
+
+### 16.3 First deploy on a fresh server
+
+```bash
+# 1 — toolchain
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs git
+sudo npm i -g yarn pm2 serve
+
+# 2 — code
+git clone https://github.com/NBekhruzbek/icefy-react.git
+cd icefy-react
+
+# 3 — environment  (MUST exist before the build)
+printf 'REACT_APP_API_URL=https://api.your-domain.com\n' > .env
+
+# 4 — build and start
+chmod +x deploy.sh
+./deploy.sh
+
+# 5 — survive reboots (once per server)
+pm2 startup && pm2 save
+```
+
+> ⚠️ `.env` is git-ignored. That is why `git reset --hard` inside `deploy.sh` never wipes it — but
+> it also means git will **never** deliver it. On a new server you write the file by hand, *before*
+> step 4, or the bundle is built with `REACT_APP_API_URL` undefined and every request goes to
+> `undefined/member/login`.
+
+### 16.4 One-command deploy — [`deploy.sh`](deploy.sh)
 
 ```bash
 #!/bin/bash
@@ -737,29 +802,156 @@ yarn run build            # compile the production bundle
 pm2 start "yarn run start:prod" --name=ICEFY-REACT
 ```
 
-Run it on the server with:
+| Line | Why it is there |
+| :--- | :--- |
+| `git reset --hard` | Guarantees a clean tree so `git pull` can never hit a merge conflict on the server |
+| `git checkout main` | `main` is the release branch; day-to-day work happens on `develop` |
+| `yarn global add serve` | `start:prod` calls `serve`, which is not a project dependency |
+| `yarn run build` | Produces `build/` — git-ignored, so the bundle is always built on the server |
+| `pm2 start …` | Registers the process under the name `ICEFY-REACT` for later `logs` / `restart` |
+
+Run it with:
 
 ```bash
 chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### Operating the process
+### 16.5 Redeploying a new release
+
+The script ends with `pm2 start`, which **fails on the second run** — PM2 refuses to launch a
+script already registered under that name. For subsequent releases:
 
 ```bash
-pm2 list                  # status of all processes
-pm2 logs ICEFY-REACT      # tail the logs
-pm2 restart ICEFY-REACT   # restart after a redeploy
-pm2 startup && pm2 save   # survive server reboots
+cd ~/icefy-react
+./deploy.sh                 # the final pm2 start errors out; the build already succeeded
+pm2 restart ICEFY-REACT     # pick up the fresh bundle
 ```
 
-### Deployment notes
+`serve` reads files from disk on every request, so a finished build is live even before the
+restart; restarting is still the safest habit, and is required if `package.json` scripts changed.
 
-- `serve -s build` enables **SPA fallback** — every unknown path returns `index.html`, which is
-  what makes client-side routes like `/products/123` work on a hard refresh.
-- The app runs on port **4100**; put Nginx in front of it for TLS and a custom domain.
-- `REACT_APP_API_URL` is baked into the bundle at build time, so a change to the API address
-  requires a **rebuild**, not just a restart.
+To make the script idempotent, replace its last line with:
+
+```bash
+pm2 restart ICEFY-REACT --update-env || pm2 start "yarn run start:prod" --name=ICEFY-REACT
+```
+
+### 16.6 Operating the process
+
+| Command | What it does |
+| :--- | :--- |
+| `pm2 list` | Status, uptime and restart count of every process |
+| `pm2 logs ICEFY-REACT` | Tail stdout/stderr live |
+| `pm2 logs ICEFY-REACT --lines 200` | Last 200 log lines |
+| `pm2 restart ICEFY-REACT` | Restart after a redeploy |
+| `pm2 stop ICEFY-REACT` | Take the site offline without unregistering it |
+| `pm2 delete ICEFY-REACT` | Unregister — needed before a clean `pm2 start` |
+| `pm2 monit` | Live CPU / memory dashboard |
+| `pm2 flush` | Truncate log files that have grown large |
+| `pm2 startup && pm2 save` | Persist the process list so it returns after a reboot |
+
+### 16.7 Nginx reverse proxy and TLS
+
+Put Nginx in front of port `4100` to get a domain, HTTPS and gzip:
+
+```nginx
+server {
+    listen 80;
+    server_name icefy.your-domain.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name icefy.your-domain.com;
+
+    ssl_certificate     /etc/letsencrypt/live/icefy.your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/icefy.your-domain.com/privkey.pem;
+
+    location / {
+        proxy_pass         http://127.0.0.1:4100;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+
+    # hashed assets are immutable; index.html must never be cached
+    location = /index.html {
+        proxy_pass http://127.0.0.1:4100;
+        add_header Cache-Control "no-store";
+    }
+}
+```
+
+```bash
+sudo certbot --nginx -d icefy.your-domain.com   # issue + auto-renew the certificate
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+Do **not** replace the proxy with a plain `root /path/build;` block unless you also add
+`try_files $uri /index.html;` — that fallback is what `serve -s` provides, and without it a hard
+refresh on `/products/123` returns 404.
+
+### 16.8 Environment variables are baked into the bundle
+
+This is the single most common deployment surprise with CRA:
+
+- `REACT_APP_API_URL` is **inlined at build time**, not read at runtime. Changing `.env` and
+  restarting PM2 changes nothing — you must `yarn run build` again. Verify with
+  `grep -ro "4003" build/static/js | head -1`.
+- Only variables prefixed `REACT_APP_` are exposed, and **everything inlined is public** — it ships
+  inside the JavaScript. Never put a secret in `.env`.
+- Once the SPA is served over HTTPS, the API must be HTTPS too. A `https://` page calling
+  `http://…:4003` is blocked as mixed content, which kills both axios and the Socket.IO connection
+  in [`SocketContext.tsx`](src/app/context/SocketContext.tsx).
+- Every service call sets `withCredentials: true`, so the backend must answer with
+  `Access-Control-Allow-Origin: <exact deployed origin>` and `Access-Control-Allow-Credentials: true`.
+  A wildcard `*` is rejected by the browser when credentials are involved. Cross-site session
+  cookies additionally need `SameSite=None; Secure`.
+
+### 16.9 Rolling back
+
+```bash
+cd ~/icefy-react
+git log --oneline -10
+git checkout <last-good-commit>
+yarn && yarn run build
+pm2 restart ICEFY-REACT
+```
+
+The next `./deploy.sh` run resets to the tip of `main`, so a rollback lasts only until the
+following deploy — fix forward, or move `main` back, to make it permanent.
+
+### 16.10 Troubleshooting
+
+| Symptom | Likely cause | Fix |
+| :--- | :--- | :--- |
+| Blank white page, 404s for `/static/js/*` | App served from a sub-path | Serve from the domain root, or set `"homepage"` in `package.json` and rebuild |
+| `/products/123` 404s on refresh | SPA fallback lost (`-s` flag dropped, or Nginx serving files directly) | Keep `serve -s build`; proxy to it instead of using `root` |
+| Requests go to `undefined/...` | `.env` missing at build time | Create `.env`, then **rebuild** |
+| Console shows a CORS error | Deployed origin not allow-listed by the API | Add the origin on the backend with credentials enabled |
+| `Mixed Content: blocked` | HTTPS page, HTTP API | Serve the API over HTTPS and rebuild |
+| Login works, session lost on refresh | Cross-site cookie rejected | Backend cookie needs `SameSite=None; Secure` |
+| `EADDRINUSE :4100` | An old `serve` is still running | `pm2 delete ICEFY-REACT`, then check `lsof -i :4100` |
+| `Script already launched` from PM2 | Second `./deploy.sh` run | `pm2 restart ICEFY-REACT`, or use the idempotent line in §16.5 |
+| Site gone after a reboot | Process list never persisted | `pm2 startup && pm2 save` |
+| Old UI after a deploy | Cached `index.html` | Hard refresh; add the `no-store` header from §16.7 |
+| Build killed on a small VPS | Out of memory | Add swap, or build elsewhere and copy `build/` over |
+
+### 16.11 Release checklist
+
+- [ ] `.env` on the server points at the **production** API over HTTPS
+- [ ] `yarn run build` completes with no TypeScript errors
+- [ ] `pm2 list` shows `ICEFY-REACT` **online** with a stable restart count
+- [ ] `pm2 startup && pm2 save` has been run once on this server
+- [ ] Backend CORS allows the deployed origin **with credentials**
+- [ ] A deep link (`/products/:id`) survives a hard refresh
+- [ ] Signup → add to cart → place order verified against production
+- [ ] Certificate valid and auto-renewal active (`sudo certbot renew --dry-run`)
 
 ---
 
@@ -1520,9 +1712,75 @@ yarn start
 
 ## 16. 배포
 
-프로덕션 빌드는 `serve`가 서빙하는 정적 파일 묶음이며, **PM2**가 프로세스를 관리합니다.
+Icefy는 **정적 번들**로 배포됩니다. `yarn build`가 React를 해시가 붙은 파일로 컴파일해
+`build/`에 넣고, [`serve`](https://www.npmjs.com/package/serve)가 포트 `4100`에서 이 파일들을
+HTTP로 제공하며, **PM2**가 해당 프로세스를 살아 있게 유지하고 서버 재부팅 후에도 되살립니다.
+이 앱에는 자체 Node 서버가 없으며, 동적인 부분은 모두 브라우저가 **직접** 호출하는 백엔드 API가
+담당합니다.
 
-### 원커맨드 배포 — [`deploy.sh`](deploy.sh)
+### 16.1 프로덕션 구성
+
+```
+                     ┌───────────────────────────────────────────┐
+   브라우저 ─:443──▶ │  Nginx — TLS 종단, 도메인 연결            │
+                     │  proxy_pass → http://127.0.0.1:4100       │
+                     └────────────────────┬──────────────────────┘
+                                          │
+                     ┌────────────────────▼──────────────────────┐
+                     │  PM2 › ICEFY-REACT                        │
+                     │  serve -s build -l 4100   (정적 SPA)      │
+                     └───────────────────────────────────────────┘
+
+   브라우저 ─── axios REST (withCredentials)  ──────▶  백엔드 API :4003
+   브라우저 ─── Socket.IO WebSocket           ──────▶  백엔드 API :4003
+```
+
+여기서 중요한 점은 **Nginx는 SPA 셸만 제공한다**는 것입니다. REST와 Socket.IO 트래픽은
+브라우저에서 백엔드 오리진으로 곧장 나가므로, CORS·쿠키·API의 TLS는 이 저장소가 아니라
+백엔드가 책임집니다.
+
+### 16.2 서버 사전 요구사항
+
+| 요구사항 | 설명 |
+| :--- | :--- |
+| Node.js 20.x | 개발 환경과 동일한 메이저 버전(20.19.5에서 검증) |
+| Yarn 1.x | `deploy.sh`가 전역 설치, npm으로도 가능 |
+| PM2 | 프로세스 관리자 — 서버당 한 번 전역 설치 |
+| `serve` | SPA 폴백을 지원하는 정적 서버 — `deploy.sh`가 전역 설치 |
+| Git | `deploy.sh`가 `origin/main`에서 릴리스를 가져옴 |
+| 포트 `4100` | 내부 전용 — 외부에는 `80`/`443`을 Nginx로 노출 |
+| 접근 가능한 백엔드 | API 호스트가 배포 오리진의 요청을 허용해야 함 |
+| 여유 메모리 약 1GB | CRA 프로덕션 빌드는 소형 VPS에서 메모리를 많이 사용 |
+
+### 16.3 신규 서버 최초 배포
+
+```bash
+# 1 — 툴체인
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs git
+sudo npm i -g yarn pm2 serve
+
+# 2 — 소스
+git clone https://github.com/NBekhruzbek/icefy-react.git
+cd icefy-react
+
+# 3 — 환경변수 (빌드 전에 반드시 생성)
+printf 'REACT_APP_API_URL=https://api.your-domain.com\n' > .env
+
+# 4 — 빌드 및 실행
+chmod +x deploy.sh
+./deploy.sh
+
+# 5 — 재부팅 대비 (서버당 한 번)
+pm2 startup && pm2 save
+```
+
+> ⚠️ `.env`는 git에서 제외되어 있습니다. 그래서 `deploy.sh`의 `git reset --hard`가 이 파일을
+> 지우지 않지만, 반대로 git이 이 파일을 **전달해 주지도 않습니다**. 새 서버에서는 4단계 *이전에*
+> 직접 작성해야 하며, 그렇지 않으면 `REACT_APP_API_URL`이 undefined인 채로 번들이 만들어져
+> 모든 요청이 `undefined/member/login`으로 향합니다.
+
+### 16.4 원커맨드 배포 — [`deploy.sh`](deploy.sh)
 
 ```bash
 #!/bin/bash
@@ -1539,6 +1797,14 @@ yarn run build            # 프로덕션 번들 빌드
 pm2 start "yarn run start:prod" --name=ICEFY-REACT
 ```
 
+| 명령 | 이유 |
+| :--- | :--- |
+| `git reset --hard` | 작업 트리를 깨끗이 만들어 서버에서 `git pull` 충돌이 나지 않도록 보장 |
+| `git checkout main` | `main`이 릴리스 브랜치, 일상 작업은 `develop`에서 진행 |
+| `yarn global add serve` | `start:prod`가 사용하는 `serve`는 프로젝트 의존성이 아님 |
+| `yarn run build` | git에서 제외된 `build/`를 생성 — 번들은 항상 서버에서 빌드됨 |
+| `pm2 start …` | 이후 `logs`/`restart`에 쓸 이름 `ICEFY-REACT`로 프로세스 등록 |
+
 서버에서 다음과 같이 실행합니다.
 
 ```bash
@@ -1546,23 +1812,141 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### 프로세스 운영
+### 16.5 새 릴리스 재배포
+
+스크립트 마지막 줄이 `pm2 start`이므로 **두 번째 실행부터는 실패합니다**. 같은 이름으로 이미
+등록된 스크립트는 PM2가 다시 실행하지 않기 때문입니다. 이후 릴리스에서는 다음과 같이 합니다.
 
 ```bash
-pm2 list                  # 전체 프로세스 상태 확인
-pm2 logs ICEFY-REACT      # 로그 실시간 확인
-pm2 restart ICEFY-REACT   # 재배포 후 재시작
-pm2 startup && pm2 save   # 서버 재부팅 후 자동 실행
+cd ~/icefy-react
+./deploy.sh                 # 마지막 pm2 start만 에러, 빌드는 이미 완료됨
+pm2 restart ICEFY-REACT     # 새 번들 반영
 ```
 
-### 배포 시 주의사항
+`serve`는 요청마다 디스크에서 파일을 읽으므로 빌드가 끝나는 순간 새 번들이 적용됩니다. 그래도
+재시작을 습관화하는 편이 안전하며, `package.json`의 스크립트가 바뀐 경우에는 반드시 필요합니다.
 
-- `serve -s build`는 **SPA 폴백**을 활성화합니다. 알 수 없는 경로에 대해 `index.html`을
-  반환하므로, `/products/123` 같은 클라이언트 라우트를 새로고침해도 정상 동작합니다.
-- 앱은 포트 **4100**에서 동작하며, HTTPS와 도메인 연결을 위해 앞단에 Nginx를 두는 것을
-  권장합니다.
-- `REACT_APP_API_URL`은 빌드 시점에 번들에 포함되므로, API 주소가 바뀌면 재시작이 아니라
-  **재빌드**가 필요합니다.
+스크립트를 몇 번 실행해도 안전하게 만들려면 마지막 줄을 다음으로 교체하세요.
+
+```bash
+pm2 restart ICEFY-REACT --update-env || pm2 start "yarn run start:prod" --name=ICEFY-REACT
+```
+
+### 16.6 프로세스 운영
+
+| 명령어 | 설명 |
+| :--- | :--- |
+| `pm2 list` | 모든 프로세스의 상태·구동 시간·재시작 횟수 |
+| `pm2 logs ICEFY-REACT` | 로그 실시간 확인 |
+| `pm2 logs ICEFY-REACT --lines 200` | 최근 200줄 로그 확인 |
+| `pm2 restart ICEFY-REACT` | 재배포 후 재시작 |
+| `pm2 stop ICEFY-REACT` | 등록은 유지한 채 서비스 중지 |
+| `pm2 delete ICEFY-REACT` | 등록 해제 — 깨끗한 `pm2 start` 전에 필요 |
+| `pm2 monit` | CPU·메모리 실시간 대시보드 |
+| `pm2 flush` | 커진 로그 파일 비우기 |
+| `pm2 startup && pm2 save` | 프로세스 목록 저장 — 재부팅 후 자동 실행 |
+
+### 16.7 Nginx 리버스 프록시와 TLS
+
+도메인·HTTPS·gzip을 위해 포트 `4100` 앞단에 Nginx를 둡니다.
+
+```nginx
+server {
+    listen 80;
+    server_name icefy.your-domain.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name icefy.your-domain.com;
+
+    ssl_certificate     /etc/letsencrypt/live/icefy.your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/icefy.your-domain.com/privkey.pem;
+
+    location / {
+        proxy_pass         http://127.0.0.1:4100;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+
+    # 해시가 붙은 정적 자산은 불변, index.html은 캐시하지 않음
+    location = /index.html {
+        proxy_pass http://127.0.0.1:4100;
+        add_header Cache-Control "no-store";
+    }
+}
+```
+
+```bash
+sudo certbot --nginx -d icefy.your-domain.com   # 인증서 발급 및 자동 갱신
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+프록시 대신 `root /path/build;`로 직접 서빙한다면 반드시 `try_files $uri /index.html;`를 함께
+추가해야 합니다. 이 폴백이 바로 `serve -s`가 해 주던 일이며, 없으면 `/products/123`을
+새로고침할 때 404가 발생합니다.
+
+### 16.8 환경변수는 번들에 구워집니다
+
+CRA 배포에서 가장 자주 겪는 문제입니다.
+
+- `REACT_APP_API_URL`은 런타임이 아니라 **빌드 시점에 코드로 치환**됩니다. `.env`만 바꾸고 PM2를
+  재시작해도 아무것도 달라지지 않으며, 반드시 `yarn run build`를 다시 해야 합니다.
+  `grep -ro "4003" build/static/js | head -1`로 확인할 수 있습니다.
+- `REACT_APP_` 접두사가 붙은 변수만 노출되고, **치환된 값은 모두 공개됩니다** — 자바스크립트에
+  그대로 포함되므로 비밀 값을 `.env`에 넣으면 안 됩니다.
+- SPA를 HTTPS로 서빙하면 API도 HTTPS여야 합니다. `https://` 페이지가 `http://…:4003`을 호출하면
+  혼합 콘텐츠로 차단되어 axios와 [`SocketContext.tsx`](src/app/context/SocketContext.tsx)의
+  Socket.IO 연결이 모두 끊깁니다.
+- 모든 서비스 호출이 `withCredentials: true`를 사용하므로, 백엔드는
+  `Access-Control-Allow-Origin: <정확한 배포 오리진>`과 `Access-Control-Allow-Credentials: true`를
+  응답해야 합니다. 자격 증명이 포함된 요청에서 와일드카드 `*`는 브라우저가 거부합니다. 크로스
+  사이트 세션 쿠키에는 추가로 `SameSite=None; Secure`가 필요합니다.
+
+### 16.9 롤백
+
+```bash
+cd ~/icefy-react
+git log --oneline -10
+git checkout <정상-동작하던-커밋>
+yarn && yarn run build
+pm2 restart ICEFY-REACT
+```
+
+다음 `./deploy.sh` 실행 시 다시 `main`의 최신 커밋으로 초기화되므로, 이 롤백은 다음 배포까지만
+유효합니다. 영구적으로 되돌리려면 수정 후 재배포하거나 `main` 브랜치 자체를 되돌려야 합니다.
+
+### 16.10 문제 해결
+
+| 증상 | 원인 | 해결 |
+| :--- | :--- | :--- |
+| 흰 화면, `/static/js/*` 404 | 하위 경로에서 서빙 중 | 도메인 루트에서 서빙하거나 `package.json`에 `"homepage"` 지정 후 재빌드 |
+| `/products/123` 새로고침 시 404 | SPA 폴백 없음(`-s` 누락 또는 Nginx가 직접 서빙) | `serve -s build` 유지, `root` 대신 프록시 사용 |
+| 요청이 `undefined/...`로 감 | 빌드 시점에 `.env` 없음 | `.env` 생성 후 **재빌드** |
+| 콘솔에 CORS 에러 | API가 배포 오리진을 허용하지 않음 | 백엔드에 오리진 추가 + credentials 허용 |
+| `Mixed Content: blocked` | HTTPS 페이지에서 HTTP API 호출 | API를 HTTPS로 전환 후 재빌드 |
+| 로그인은 되는데 새로고침 시 세션 소실 | 크로스 사이트 쿠키 거부 | 백엔드 쿠키에 `SameSite=None; Secure` 설정 |
+| `EADDRINUSE :4100` | 이전 `serve` 프로세스가 남아 있음 | `pm2 delete ICEFY-REACT` 후 `lsof -i :4100` 확인 |
+| PM2 `Script already launched` | `./deploy.sh` 재실행 | `pm2 restart ICEFY-REACT` 또는 §16.5의 멱등 명령 사용 |
+| 재부팅 후 사이트 다운 | 프로세스 목록 미저장 | `pm2 startup && pm2 save` |
+| 배포 후에도 이전 화면 | `index.html` 캐시 | 강력 새로고침, §16.7의 `no-store` 헤더 추가 |
+| 소형 VPS에서 빌드 중단 | 메모리 부족 | 스왑 추가 또는 다른 곳에서 빌드 후 `build/` 복사 |
+
+### 16.11 릴리스 체크리스트
+
+- [ ] 서버의 `.env`가 **프로덕션** API(HTTPS)를 가리키는가
+- [ ] `yarn run build`가 TypeScript 에러 없이 완료되는가
+- [ ] `pm2 list`에서 `ICEFY-REACT`가 **online**이고 재시작 횟수가 안정적인가
+- [ ] 해당 서버에서 `pm2 startup && pm2 save`를 한 번 실행했는가
+- [ ] 백엔드 CORS가 배포 오리진을 **credentials 포함**으로 허용하는가
+- [ ] 딥링크(`/products/:id`)가 강력 새로고침 후에도 동작하는가
+- [ ] 회원가입 → 장바구니 담기 → 주문 흐름을 프로덕션에서 확인했는가
+- [ ] 인증서가 유효하고 자동 갱신이 동작하는가 (`sudo certbot renew --dry-run`)
 
 ---
 
